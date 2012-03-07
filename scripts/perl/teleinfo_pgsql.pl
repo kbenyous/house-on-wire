@@ -59,16 +59,14 @@ while(1) {
 		$line='';
 		$maintenant = DateTime->now();
 		$datetime = ($maintenant->date()." ".$maintenant->time());
-		$line=($maintenant->epoch().";".$maintenant->date().";".$maintenant->time().";");
-		chomp $line;
 	}
 	if (($byte) and ($byte eq chr(3))) # Detection caractere Caractere ETX
 	{
-		if ($line =~ /^(\d{10});(\d{4}-\d{2}-\d{2});(\d{2}:\d{2}:\d{2});.ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (....);IINST (\d{3});IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
+		if ($line =~ /^ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (....);IINST (\d{3});IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
 		{
 			print "Format ligne OK : $line\n";
-			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée MySQL $DBI::errstr";
-            		$dbi->do("insert into teleinfo (timestamp,rec_date,rec_time,adco,optarif,isousc,hchc,hchp,ptec,inst1,imax1,papp,hhphc,motdetat, date) values ($1,'$2','$3','$4','$5',$6,$7,$8,'$9'::varchar(2),$10,$11,$12,'$13','$14', '$datetime')");
+			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
+            		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,hhphc, date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
 			$dbi->disconnect;
 		}
 		else
