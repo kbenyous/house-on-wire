@@ -62,7 +62,7 @@ while(1) {
 	}
 	if (($byte) and ($byte eq chr(3))) # Detection caractere Caractere ETX
 	{
-		if ($line =~ /^ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (....);IINST (\d{3});IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
+		if ($line =~ /^ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (..)\\..;IINST (\d{3});(?:ADPS \d{3};)IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
 		{
 			print "Format ligne OK : $line\n";
 			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
