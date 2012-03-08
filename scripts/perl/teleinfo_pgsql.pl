@@ -41,7 +41,7 @@ my $login=$cfg->{bdd}->{username};
 my $password=$cfg->{bdd}->{password};
 my $dbport=$cfg->{bdd}->{port};
 
-my $port = Device::SerialPort->new("/dev/ttyUSB0");
+my $port = Device::SerialPort->new("/dev/teleinfo");
 $port->databits($cfg->{teleinfo_serial}->{databits});
 $port->baudrate($cfg->{teleinfo_serial}->{baudrate});
 $port->parity($cfg->{teleinfo_serial}->{parity});
