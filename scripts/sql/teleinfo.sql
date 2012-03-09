@@ -10,7 +10,6 @@ CREATE TABLE teleinfo (
     ptec character varying(2) NOT NULL,
     iinst integer DEFAULT 0 NOT NULL,
     imax integer DEFAULT 0 NOT NULL,
-    pmax integer DEFAULT 0 NOT NULL,
     papp integer DEFAULT 0 NOT NULL
 );
 
