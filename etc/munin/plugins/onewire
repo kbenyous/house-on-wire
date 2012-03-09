@@ -1,0 +1,42 @@
+#!/usr/bin/perl -w
+ 
+# script munin de monitoring de température via owfs
+# http://perso.ens-lyon.fr/sebastien.mei/wiki/doku.php?id=documentations:ds1820owfs
+# Monter le /mnt/owfs avec l'option suivante : /usr/local/owfs-2.8p14/bin/owfs  --allow_other /dev/ttyUSB1 /mnt/owfs 
+
+use strict;
+ 
+# Je récupère les ds1820 dans mon owfs
+opendir(THERM,"/mnt/owfs") or die "no";
+my @ds1820 = grep /^28\..*/, readdir THERM;
+ 
+# Petit translation de l'id du ds en terme plus parlant
+my %translate =( "28.762753030000"=>"Bureau","28.53FC52030000"=>"Exterieur","28.032A53030000"=>"Piece");
+ 
+# Gestion de l'autoconf et de la config
+if (defined $ARGV[0]) {
+  if ($ARGV[0] eq 'autoconf') {
+    if ( @ds1820 ) {
+      print "yes\n";
+      exit 0;
+    } else {
+      print "no (ds1820 not found)\n";
+      exit 1;
+    }
+  } elsif ($ARGV[0] eq 'config') {
+    print "graph_title Temperature sur ow\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_vlabel temp in °C\n";
+    print "graph_category sensors\n";
+    print "graph_info This graph shows the temperature in degrees Celsius on the one-wire network.\n";
+    print "$translate{$_}.label $translate{$_}\n" foreach @ds1820;
+    exit 0;
+  }
+}
+ 
+# Récupération de la température de chaque capteur
+foreach (@ds1820) {
+  my $therm=$_;
+  my $temp=`cat /mnt/owfs/$therm/temperature`;
+  print "$translate{$therm}.value $temp\n";
+}
