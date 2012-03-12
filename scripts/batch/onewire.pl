@@ -44,6 +44,7 @@ my $owfs_path=$cfg->{owfs}->{path};
 
 
 $maintenant = DateTime->now();
+$maintenant->set_time_zone( 'Europe/Paris' );
 $datetime = ($maintenant->date()." ".$maintenant->time());
 
 my %DEVICES = (
@@ -55,6 +56,10 @@ my %DEVICES = (
 opendir(THERM,$owfs_path) or die "no";
 my @sondes = grep /^..\..*/, readdir THERM;
 
+
+
+my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
+
 # Récupération de la température de chaque capteur
 foreach (@sondes) {
 
@@ -64,12 +69,8 @@ foreach (@sondes) {
   
   chomp($sonde_type);
   chomp($sonde_data);
-print "$date_time $sonde $sonde_type $sonde_data \n";
+print "$datetime $sonde $sonde_type $sonde_data \n";
 
-#my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
-#$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,hhphc, date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
-#$dbi->disconnect;
-
-
+$dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$sonde', '$sonde_data')");
 }
-
+$dbi->disconnect;

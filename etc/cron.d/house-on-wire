@@ -1,0 +1,7 @@
+
+
+# Historisation des informations te teleinfo
+0 3 * * *  root  psql -U supervision homedata -c "select historisation_teleinfo()" >/var/log/house-on-wire/teleinfo_histo.log 2>&1
+
+
+*/5 * * * * root perl /mnt/data/scripts/onewire.pl > /var/log/house-on-wire/onewire.log 2>&1
