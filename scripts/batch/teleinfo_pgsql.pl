@@ -58,6 +58,7 @@ while(1) {
 	{
 		$line='';
 		$maintenant = DateTime->now();
+		$maintenant->set_time_zone( 'Europe/Paris' );
 		$datetime = ($maintenant->date()." ".$maintenant->time());
 	}
 	if (($byte) and ($byte eq chr(3))) # Detection caractere Caractere ETX
