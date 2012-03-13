@@ -59,15 +59,15 @@ while(1) {
 		$line='';
 		$maintenant = DateTime->now();
 		$maintenant->set_time_zone( 'Europe/Paris' );
-		$datetime = ($maintenant->date()." ".$maintenant->time());
+		$datetime = ($maintenant->date()." ".$maintenant->time().".".$maintenant->millisecond());
 	}
 	if (($byte) and ($byte eq chr(3))) # Detection caractere Caractere ETX
 	{
-		if ($line =~ /^ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (..)\\..;IINST (\d{3});(?:ADPS \d{3};)IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
+		if ($line =~ /ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (..)..;IINST (\d{3});IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
 		{
-			print "Format ligne OK : $line\n";
+			print "Format ligne OK : $line $datetime\n";
 			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
-            		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,hhphc, date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
+            		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
 			$dbi->disconnect;
 		}
 		else
