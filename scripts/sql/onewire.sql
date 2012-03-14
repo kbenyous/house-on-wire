@@ -9,5 +9,6 @@ CREATE TABLE onewire (
   name text NOT NULL,
   unity varchar(32),
   last_update timestamp without time zone,
+  last_value varchar(32),
   comment text
 );
