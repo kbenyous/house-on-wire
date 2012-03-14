@@ -12,3 +12,24 @@ CREATE TABLE onewire (
   last_value varchar(32),
   comment text
 );
+
+
+CREATE OR REPLACE FUNCTION tf_onewiredata_aiu()
+  RETURNS trigger AS
+$BODY$
+begin
+
+UPDATE onewire SET last_update = NEW.date, last_value = NEW.value WHERE id = NEW.id;
+
+return null;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+
+CREATE TRIGGER trg_onewiredata_aiu
+  AFTER UPDATE OR INSERT
+  ON onewire_data
+  FOR EACH ROW
+  EXECUTE PROCEDURE tf_onewiredata_aiu();
