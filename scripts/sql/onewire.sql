@@ -6,7 +6,8 @@ CREATE TABLE onewire_data (
 
 CREATE TABLE onewire (
   id varchar(32) NOT NULL,
-	name text NOT NULL,
+  name text NOT NULL,
   unity varchar(32),
-  last_update timestamp without time zone
+  last_update timestamp without time zone,
+  comment text
 );
