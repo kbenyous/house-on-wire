@@ -27,7 +27,7 @@ class Teleinfo:
 		
 		while not fin:
 			char = self.ser.read(1)
-			if char != chr(2):
+			if char != chr(3):
 				message = message + char
 			else:
 				fin = True
