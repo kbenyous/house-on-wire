@@ -1,0 +1,112 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    vertical-align: baseline;
+    font-family: arial, sans-serif;
+    border: none;
+    -moz-box-shadow: none;
+    -moz-border-radius: 0px;
+    -webkit-box-shadow: none;
+    -webkit-border-radius: 0px;
+    box-shadow: none;
+    border-radius: 0px;
+}
+
+html {
+    font-size: 75%;
+    text-align: center;
+}
+
+body {
+    font-size: 0.9em;
+    text-align: center;
+    width: 980px;
+    margin: 0px auto;
+    background-color: #EEEEEE;
+    color: #444444;
+}
+
+div, p, a, span, ul, li, img, iframe, b, u {
+    border: none;
+}
+
+u {
+    text-decoration: underline;
+}
+
+ul {
+    list-style: disc;
+}
+
+li {
+    margin-left: 20px;
+}
+
+a {
+    text-decoration: underline;
+    color: #444444;
+}
+
+a:focus {
+    outline: none;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+input[type="text"],
+input[type="submit"],
+input[type="button"],
+input[type="password"],
+textarea,
+select,
+button,
+fieldset,
+fieldset legend {
+    border: 1px solid #bfbfbf;
+    background-color: #eeeeee;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 2px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+fieldset,
+fieldset legend {
+    cursor: default;
+}
+
+fieldset {
+    background-color: white;
+}
+
+    fieldset legend {
+        margin: 5px;
+        padding: 5px;
+        font-weight: bold; 
+    }
+
+textarea {
+    cursor: text;
+}
+
+hr {
+    border-top: 1px solid #3e6778;
+}
+
+/* Classes globales */
+.hidden {
+    display: none;
+}
+
+#pageTitle {
+    text-align: left;
+    font-size: 2em;
+    padding: 30px 30px 10px 30px;
+}
