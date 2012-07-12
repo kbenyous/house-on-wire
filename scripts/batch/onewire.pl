@@ -49,6 +49,8 @@ $datetime = ($maintenant->date()." ".$maintenant->time());
 
 my %DEVICES = (
     "DS18B20"   =>  'temperature',
+    "DS18S20"   =>  'temperature',
+    "DS1822"   =>  'temperature',
     "DS18B22"   =>  'temperature'
 );
 
@@ -58,7 +60,7 @@ my @sondes = grep /^..\..*/, readdir THERM;
 
 
 
-my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
+my $dbi=DBI->connect("DBI:PgPP:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
 
 # Récupération de la température de chaque capteur
 foreach (@sondes) {
