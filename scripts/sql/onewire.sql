@@ -13,6 +13,7 @@ CREATE TABLE onewire (
   comment text
 );
 
+CREATE INDEX idx_owd_id_date ON onewire_data (id, date);
 
 CREATE OR REPLACE FUNCTION tf_onewiredata_aiu()
   RETURNS trigger AS
