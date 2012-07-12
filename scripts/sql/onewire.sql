@@ -10,7 +10,8 @@ CREATE TABLE onewire (
   unity varchar(32),
   last_update timestamp without time zone,
   last_value varchar(32),
-  comment text
+  comment text,
+  type text
 );
 
 CREATE INDEX idx_owd_id_date ON onewire_data (id, date);
