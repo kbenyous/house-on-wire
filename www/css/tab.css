@@ -1,0 +1,32 @@
+.tabs {
+}
+
+    .tabs .tabsButtons {
+        overflow: hidden;
+        padding: 0px 5px;
+    }
+    
+        .tabs .tabsButtons .tab {
+            border: 1px solid #333333;
+            padding: 5px;
+            float: left;
+            border-radius: 4px 4px 0px 0px;
+            cursor: pointer;
+            background-color: #999999;
+            margin-right: 1px;
+            color: white;
+        }
+    
+        .tabs .tabsButtons .tab.selected {
+            background-color: white;
+            border-bottom: 1px solid white;
+            color: #5b5c5e;
+        }
+    
+    .tabs .tabsContainers {
+        border: 1px solid #333333;
+        border-radius: 0px 0px 4px 4px;
+        margin-top: -1px;
+        background-color: white;
+        padding: 1px;
+    }

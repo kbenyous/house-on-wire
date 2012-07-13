@@ -1,0 +1,79 @@
+/* Définition des popups */
+.popupLink {
+    cursor: pointer;
+    border-bottom: 1px dotted #3e6778;
+    display: inline;
+    text-decoration: none;
+}
+
+.popupClose {
+    cursor: pointer;
+}
+
+.popup {
+    text-align: left;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+    .popup #popupBackground {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background-color: #000000;
+        z-index: 10001;
+    }
+
+    .popup #popupBody {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background-color: #3e6778;
+        z-index: 10002;
+    }
+
+        .popup #popupBody .popupCross {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            background: url('/image/cross-black.png') center center no-repeat transparent;
+            width: 32px;
+            height: 32px;
+        }
+
+        .popup #popupBody .popupBodyTitle {
+            padding: 5px;
+            border-bottom: 1px solid #3e6778;
+            cursor: move;
+        }
+
+            .popup #popupBody .popupBodyTitle * {
+                vertical-align: middle;
+            }
+
+            .popup #popupBody .popupBodyTitle span {
+                font-size: 1.1em;
+                font-weight: bold;
+                color: #ffffff;
+            }
+
+        .popup #popupBody .popupBodyContent {
+            padding: 10px;
+            background-color: #ffffff;
+        }
+
+        .popup #popupBody .popupBodyButtons {
+            padding: 10px;
+            background-color: #ffffff;
+        }
+
+            .popup #popupBody .popupBodyButtons input {
+                margin-right: 10px;
+            }

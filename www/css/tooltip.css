@@ -1,0 +1,34 @@
+.tooltipAnchor {
+    display: inline-block;
+}
+
+    .tooltipAnchor .tooltipHandle {
+        display: inline !important;
+        cursor: help;
+    }
+
+    .tooltipAnchor .tooltipContent {
+        display: none;
+        width: 25em;
+    }
+
+    .tooltipAnchor .tooltip {
+        position: absolute;
+        z-index: 100000;
+        display: block !important;
+    }
+
+        .tooltipAnchor .tooltip .tooltipCanvas {
+            position: absolute;
+            display: block !important;
+        }
+
+        .tooltipAnchor .tooltip .tooltipCanvasText {
+            position: absolute;
+            display: block !important;
+        }
+
+        .tooltipAnchor .tooltip .tooltipCanvasText,
+        .tooltipAnchor .tooltip .tooltipCanvasText * {
+            color: #444444;
+        }

@@ -21,7 +21,7 @@ html {
 body {
     font-size: 0.9em;
     text-align: center;
-    width: 980px;
+    width: 1224px;
     margin: 0px auto;
     background-color: #EEEEEE;
     color: #444444;
@@ -64,9 +64,7 @@ input[type="button"],
 input[type="password"],
 textarea,
 select,
-button,
-fieldset,
-fieldset legend {
+button {
     border: 1px solid #bfbfbf;
     background-color: #eeeeee;
     -moz-border-radius: 4px;
@@ -76,21 +74,6 @@ fieldset legend {
     font-size: 1em;
     cursor: pointer;
 }
-
-fieldset,
-fieldset legend {
-    cursor: default;
-}
-
-fieldset {
-    background-color: white;
-}
-
-    fieldset legend {
-        margin: 5px;
-        padding: 5px;
-        font-weight: bold; 
-    }
 
 textarea {
     cursor: text;
@@ -105,8 +88,12 @@ hr {
     display: none;
 }
 
+#background {
+    padding: 10px;
+}
+
 #pageTitle {
     text-align: left;
     font-size: 2em;
-    padding: 30px 30px 10px 30px;
+    padding: 10px 30px 10px 30px;
 }

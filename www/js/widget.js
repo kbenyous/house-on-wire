@@ -5,13 +5,13 @@ var widgetClass = AbstractClass.extend({
 
     init: function(widgetData) {
         this._widgetData = widgetData;
-        this._widgetData.domId = Math.floor(Math.random() * 1000);
+        this._widgetData.domId = Math.floor(Math.random() * 10000000);
 
         this._timer = window.setInterval(
             this.getData.bind(this),
-            this._timerInterval + Math.floor(Math.random() * 1000)
+            this._timerInterval + Math.floor(Math.random() * 10000000)
         );
-        
+
         this.createLayout();
         this.fillUp({
             'temperature': {
@@ -28,44 +28,59 @@ var widgetClass = AbstractClass.extend({
         });
         this.getData();
     },
-    
+
     destroy: function() {
         if(this._timer != null) {
             window.clearInterval(this._timer);
             this._timer = null;
         }
     },
-    
+
     createLayout: function() {
-        $('#widgets').append('<div id="widget' + this._widgetData.domId + '" class="widget">' +
-            '<fieldset>' +
-                '<legend>' + this._widgetData.title + '</legend>' +
-                '<div class="widgetContent">' +
-                    '<div class="widgetTemperature">' +
-                        '<p class="widgetTemperatureThermometer blue">&nbsp;</p>' +
-                        '<p class="widgetTemperatureValue">&nbsp;</p>' +
-                        '<p class="widgetTemperatureUnit">' + this._widgetData.unit + '</p>' +
-                    '</div>' +
-                    '<div class="widgetDelta">' +
-                        '<p class="widgetDeltaTitle">Fréquences :</p>' +
-                        '<div class="widgetDeltaPlusOneHour">' +
-                            '<p class="widgetDeltaFrequency">1h</p>' +
-                            '<p class="widgetDeltaImage decrease">&nbsp;</p>' +
-                            '<p class="widgetDeltaValue">&nbsp;</p>' +
-                            '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+        var widgetParameters = {
+            'id': this._widgetData.id
+        }
+        $('#level' + this._widgetData.level).append('<div id="widget' + this._widgetData.domId + '" ' +
+                                  'style="top: ' + this._widgetData.top + 'px; ' +
+                                         'left: ' + this._widgetData.left + 'px;" ' +
+                                  'class="widget">' +
+            '<span class="widgetTitle">' + this._widgetData.title + '</span>' +
+            '<span> : </span>' +
+            '<span class="widgetTemperatureValue"></span>' +
+            '<span>&nbsp;</span>' +
+            '<span>' + this._widgetData.unit + '</span>' +
+            '<div class="tooltipAnchor">' +
+                '<img class="tooltipHandle" src="/image/info.png" />' +
+                '<div class="tooltipContent">' +
+                    '<p class="widgetContentTitle">' + this._widgetData.title + ' :</p>' +
+                    '<div class="widgetContent">' +
+                        '<div class="widgetTemperature">' +
+                            '<p class="widgetTemperatureThermometer blue">&nbsp;</p>' +
+                            '<p class="widgetTemperatureValue">&nbsp;</p>' +
+                            '<p class="widgetTemperatureUnit">' + this._widgetData.unit + '</p>' +
                         '</div>' +
-                        '<div class="widgetDeltaPlusOneDay">' +
-                            '<p class="widgetDeltaFrequency">1d</p>' +
-                            '<p class="widgetDeltaImage increase">&nbsp;</p>' +
-                            '<p class="widgetDeltaValue">&nbsp;</p>' +
-                            '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+                        '<div class="widgetDelta">' +
+                            '<p class="widgetDeltaTitle">Fréquences :</p>' +
+                            '<div class="widgetDeltaPlusOneHour">' +
+                                '<p class="widgetDeltaFrequency">1h</p>' +
+                                '<p class="widgetDeltaImage decrease">&nbsp;</p>' +
+                                '<p class="widgetDeltaValue">&nbsp;</p>' +
+                                '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+                            '</div>' +
+                            '<div class="widgetDeltaPlusOneDay">' +
+                                '<p class="widgetDeltaFrequency">1j</p>' +
+                                '<p class="widgetDeltaImage increase">&nbsp;</p>' +
+                                '<p class="widgetDeltaValue">&nbsp;</p>' +
+                                '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
-            '</fieldset>' +
+            '</div>' +
+            '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(widgetParameters)) + '" src="/image/graph.png" />' +
         '</div>');
     },
-    
+
     fillUp: function(response) {
         var widget = $('#widget' + this._widgetData.domId);
         if(widget.length > 0) {
@@ -77,38 +92,34 @@ var widgetClass = AbstractClass.extend({
             } else if(response.temperature.value >= 18) {
                 thermometerColor = 'green';
             }
-            
+
             $(widget).find('.widgetTemperatureThermometer')
                 .removeClass('blue')
                 .removeClass('green')
                 .removeClass('red')
                 .addClass(thermometerColor);
-            
+
             $(widget).find('.widgetDeltaImage')
                 .removeClass('increase')
                 .removeClass('decrease');
-            
+
             // Delta Plus One Hour
             $(widget).find('.widgetDeltaPlusOneHour .widgetDeltaImage').addClass(response.deltaPlusOneHour.direction);
             $(widget).find('.widgetDeltaPlusOneHour .widgetDeltaValue').html((parseFloat(response.deltaPlusOneHour.value || 0)).toFixed(2));
-            
+
             // Delta Plus One Day
             $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaImage').addClass(response.deltaPlusOneDay.direction);
             $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaValue').html((parseFloat(response.deltaPlusOneDay.value || 0)).toFixed(2));
         }
     },
-    
+
     getData: function() {
-        $.ajax({
+        new Utils_XhrRequestClass({
             'url': '/test.php',
             'data': {
                 'id': this._widgetData.id
             },
-            'success': (function(data, textStatus, jqXHR) {
-                if(data && data.status == 'success') {
-                    this.fillUp(data.content);
-                }
-            }).bind(this),
+            'success': this.fillUp.bind(this),
             'dataType': 'json'
         });
     }
