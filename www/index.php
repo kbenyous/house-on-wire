@@ -119,6 +119,9 @@
                     <div class="tab level1" data-tab-name="level1">
                         Etage
                     </div>
+                    <div class="tab graph" data-tab-name="graph">
+                        Graph général
+                    </div>
                 </div>
                 <div class="tabsContainers">
                     <div class="tabBody level0">
@@ -126,6 +129,13 @@
                     </div>
                     <div class="tabBody level1 hidden">
                         <div id="level1" class="widgets"></div>
+                    </div>
+                    <div class="tabBody graph hidden">
+                        <div id="graph">
+                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                                    height="630px" src="http://home.vitre.info/onewire/chart_full.php">
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             </div>
