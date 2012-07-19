@@ -1,0 +1,32 @@
+ALTER TABLE onewire ALTER COLUMN id TYPE text;
+ALTER TABLE onewire ALTER COLUMN unity TYPE text;
+ALTER TABLE onewire ALTER COLUMN last_value TYPE text;
+ALTER TABLE onewire_data ALTER COLUMN id TYPE text;
+ALTER TABLE onewire_data ALTER COLUMN value TYPE text;
+
+
+CREATE TABLE onewire_meta (
+id text NOT NULL,
+top integer,
+"left" integer,
+level integer,
+regroupement text
+);
+
+COMMENT ON COLUMN onewire_meta.regroupement IS 'etage, rdc, null';
+
+INSERT INTO onewire_meta ( id, top, "left", level, regroupement)
+VALUES
+('10.C0625A020800', 200, 594, 1, 'Etage'),
+('10.28BD65020800', 245, 430, 1, 'Etage'),
+('10.A8EB65020800', 245, 700, 1, 'Etage'),
+('10.380166020800', 135, 690, 1, 'Etage'),
+('10.22E465020800', 135, 480, 1, 'Etage'),
+('10.D6F865020800', 200, 518, 0, 'RdC'),
+('10.D6D765020800', 370, 480, 0, 'RdC'),
+('10.EDFA65020800', 160, 690, 0, 'RdC'),
+('28.DEE652030000', 215, 820, 0, null),
+('28.DEE652030000', 215, 820, 2, null),
+('28.BB1A53030000', 380, 860, 0, null),
+('22.587D2F000000', 270, 760, 0, null),
+('28.BB1A53030000', 380, 860, 2, null);
