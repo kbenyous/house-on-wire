@@ -1,95 +1,49 @@
 <?php
-    $pageTitle = 'Chez PY';
-    $widgetsData = array(
-        array(
-            'id' => '10.C0625A020800',
-            'title' => 'Palier',
-            'unit' => 'C',
-            'top' => 233,
-            'left' => 594,
-            'level' => '1'
-        ),
-        array(
-            'id' => '10.28BD65020800',
-            'title' => 'Chambre Justine',
-            'unit' => 'C',
-            'top' => 226,
-            'left' => 375,
-            'level' => '1'
-        ),
-        array(
-            'id' => '10.A8EB65020800',
-            'title' => 'Chambre Py/Steph',
-            'unit' => 'C',
-            'top' => 300,
-            'left' => 700,
-            'level' => '1'
-        ),
-        array(
-            'id' => '10.380166020800',
-            'title' => 'Chambre Noémie',
-            'unit' => 'C',
-            'top' => 195,
-            'left' => 745,
-            'level' => '1'
-        ),
-        array(
-            'id' => '10.22E465020800',
-            'title' => 'Chambre Léane',
-            'unit' => 'C',
-            'top' => 135,
-            'left' => 480,
-            'level' => '1'
-        ),
-        array(
-            'id' => '10.D6F865020800',
-            'title' => 'Salon/Séjour',
-            'unit' => 'C',
-            'top' => 300,
-            'left' => 450,
-            'level' => '0'
-        ),
-        array(
-            'id' => '10.D6D765020800',
-            'title' => 'Bureau',
-            'unit' => 'C',
-            'top' => 430,
-            'left' => 350,
-            'level' => '0'
-        ),
-        array(
-            'id' => '10.EDFA65020800',
-            'title' => 'Cuisine',
-            'unit' => 'C',
-            'top' => 360,
-            'left' => 670,
-            'level' => '0'
-        ),
-        array(
-            'id' => '28.DEE652030000',
-            'title' => 'Garage',
-            'unit' => 'C',
-            'top' => 430,
-            'left' => 800,
-            'level' => '0'
-        ),
-        array(
-            'id' => '28.BB1A53030000',
-            'title' => 'Exterieur',
-            'unit' => 'C',
-            'top' => 250,
-            'left' => 120,
-            'level' => '0'
-        ),
-        array(
-            'id' => '22.587D2F000000',
-            'title' => 'Baie Brassage',
-            'unit' => 'C',
-            'top' => 480,
-            'left' => 760,
-            'level' => '0'
-        )
-    );
+    $pageTitle = 'House On Wire';
+
+// Lecture du fichier de conf
+$config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
+$db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port']." dbname=".$config['bdd']['dbname']." user=".$config['bdd']['username']." password=".$config['bdd']['password']." options='--client_encoding=UTF8'") or die("Erreur de connexion au serveur SQL");
+$widgetsData = array();
+$result = pg_query( $db, "select * from onewire_meta join onewire using (id)" ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
+while ($row = pg_fetch_array($result))
+{
+	$tmp = array();
+	
+	$tmp['id'] = $row['id'];
+        $tmp['title'] = $row['name'];
+        $tmp['unit'] = $row['unity'];
+        $tmp['top'] = $row['top'];
+        $tmp['left'] = $row['left'];
+        $tmp['level'] = $row['level'];
+
+	array_push($widgetsData, $tmp);
+}
+
+        $tmp = array();
+
+        $tmp['id'] = 'RdC';
+        $tmp['title'] = 'Rez de Chaussée';
+        $tmp['unit'] = 'C';
+        $tmp['top'] = 340;
+        $tmp['left'] = 510;
+        $tmp['level'] = 2;
+
+        array_push($widgetsData, $tmp);
+
+        $tmp = array();
+
+        $tmp['id'] = 'Etage';
+        $tmp['title'] = 'Etage';
+        $tmp['unit'] = 'C';
+        $tmp['top'] = 265;
+        $tmp['left'] = 610;
+        $tmp['level'] = 2;
+
+        array_push($widgetsData, $tmp);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +53,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <![endif]-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
         <link rel="stylesheet" type="text/css" href="/css/main.css" />
         <link rel="stylesheet" type="text/css" href="/css/tooltip.css" />
         <link rel="stylesheet" type="text/css" href="/css/tab.css" />
@@ -113,18 +67,35 @@
             <h1 id="pageTitle"><?= $pageTitle; ?></h1>
             <div class="tabs">
                 <div class="tabsButtons">
-                    <div class="tab level0 selected" data-tab-name="level0">
+    
+
+                    <div class="tab level2 selected" data-tab-name="level2">
+                        Vue d'ensemble
+                    </div>
+
+	            <div class="tab level0" data-tab-name="level0">
                         Rez de chaussée
                     </div>
                     <div class="tab level1" data-tab-name="level1">
                         Etage
                     </div>
                     <div class="tab graph" data-tab-name="graph">
-                        Graph général
+                        Graph général Température
                     </div>
+                    <div class="tab graph_papp" data-tab-name="graph_papp">
+                        Graph Consommation
+                    </div>
+                    <div class="tab graph_lumi" data-tab-name="graph_lumi">
+                        Graph Luminosite
+                    </div>
+
+
                 </div>
                 <div class="tabsContainers">
-                    <div class="tabBody level0">
+                    <div class="tabBody level2">
+                        <div id="level2" class="widgets"></div>
+                    </div>
+                    <div class="tabBody level0 hidden">
                         <div id="level0" class="widgets"></div>
                     </div>
                     <div class="tabBody level1 hidden">
@@ -133,14 +104,28 @@
                     <div class="tabBody graph hidden">
                         <div id="graph">
                             <iframe frameborder="0" scrolling="no" width="1200px" 
-                                    height="630px" src="http://home.vitre.info/onewire/chart_full.php">
+                                    height="630px" src="/chart_full.php">
                             </iframe>
                         </div>
                     </div>
+                    <div class="tabBody graph_papp hidden">
+                        <div id="graph_papp">
+                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                                    height="630px" src="/chart_papp.php">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="tabBody graph_lumi hidden">
+                        <div id="graph_lumi">
+                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                                    height="630px" src="/chart.php?id=26.2FAE60010000">
+                            </iframe>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-        
         <script type="text/javascript">
             var widgetsData = <?= json_encode($widgetsData); ?>;
         </script>

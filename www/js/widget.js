@@ -14,6 +14,9 @@ var widgetClass = AbstractClass.extend({
 
         this.createLayout();
         this.fillUp({
+	    'maj': {
+		'value': 0
+	    },
             'temperature': {
                 'value': 0
             },
@@ -52,7 +55,7 @@ var widgetClass = AbstractClass.extend({
             '<div class="tooltipAnchor">' +
                 '<img class="tooltipHandle" src="/image/info.png" />' +
                 '<div class="tooltipContent">' +
-                    '<p class="widgetContentTitle">' + this._widgetData.title + ' :</p>' +
+                    '<p class="widgetContentTitle">' + this._widgetData.title + ' : <span class="widgetUpdate">&nbsp;</span></p>' +
                     '<div class="widgetContent">' +
                         '<div class="widgetTemperature">' +
                             '<p class="widgetTemperatureThermometer blue">&nbsp;</p>' +
@@ -60,7 +63,7 @@ var widgetClass = AbstractClass.extend({
                             '<p class="widgetTemperatureUnit">' + this._widgetData.unit + '</p>' +
                         '</div>' +
                         '<div class="widgetDelta">' +
-                            '<p class="widgetDeltaTitle">Fréquences :</p>' +
+                            '<p class="widgetDeltaTitle">Moyenne :</p>' +
                             '<div class="widgetDeltaPlusOneHour">' +
                                 '<p class="widgetDeltaFrequency">1h</p>' +
                                 '<p class="widgetDeltaImage decrease">&nbsp;</p>' +
@@ -73,6 +76,19 @@ var widgetClass = AbstractClass.extend({
                                 '<p class="widgetDeltaValue">&nbsp;</p>' +
                                 '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
                             '</div>' +
+                            '<p class="widgetDeltaTitle">Min / Max 24H :</p>' +
+                            '<div class="widgetDeltaPlusOneDay">' +
+                                '<p class="widgetDeltaImageMax increase">&nbsp;</p>' +
+                                '<p class="widgetDeltaValueMax">&nbsp;</p>' +
+                                '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+                            '</div>' +
+                            '<div class="widgetDeltaPlusOneDay">' +
+                                '<p class="widgetDeltaImageMin decrease">&nbsp;</p>' +
+                                '<p class="widgetDeltaValueMin">&nbsp;</p>' +
+                                '<p class="widgetDeltaUnit">' + this._widgetData.unit + '</p>' +
+                            '</div>' +
+
+
                         '</div>' +
                     '</div>' +
                 '</div>' +
@@ -84,8 +100,11 @@ var widgetClass = AbstractClass.extend({
     fillUp: function(response) {
         var widget = $('#widget' + this._widgetData.domId);
         if(widget.length > 0) {
+            $(widget).find('.widgetUpdate').html(response.maj.value);
+
+
             // Temperature
-            $(widget).find('.widgetTemperatureValue').html((parseFloat(response.temperature.value || 0)).toFixed(2));
+            $(widget).find('.widgetTemperatureValue').html((parseFloat(response.temperature.value || 0)));
             var thermometerColor = 'blue';
             if(response.temperature.value >= 22) {
                 thermometerColor = 'red';
@@ -105,17 +124,20 @@ var widgetClass = AbstractClass.extend({
 
             // Delta Plus One Hour
             $(widget).find('.widgetDeltaPlusOneHour .widgetDeltaImage').addClass(response.deltaPlusOneHour.direction);
-            $(widget).find('.widgetDeltaPlusOneHour .widgetDeltaValue').html((parseFloat(response.deltaPlusOneHour.value || 0)).toFixed(2));
+            $(widget).find('.widgetDeltaPlusOneHour .widgetDeltaValue').html((parseFloat(response.deltaPlusOneHour.value || 0)));
 
             // Delta Plus One Day
             $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaImage').addClass(response.deltaPlusOneDay.direction);
-            $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaValue').html((parseFloat(response.deltaPlusOneDay.value || 0)).toFixed(2));
+            $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaValue').html((parseFloat(response.deltaPlusOneDay.value || 0)));
+            $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaValueMin').html((parseFloat(response.deltaPlusOneDay.min || 0)));
+            $(widget).find('.widgetDeltaPlusOneDay .widgetDeltaValueMax').html((parseFloat(response.deltaPlusOneDay.max || 0)));
+
         }
     },
 
     getData: function() {
         new Utils_XhrRequestClass({
-            'url': '/test.php',
+            'url': '/get_onewire_data.php',
             'data': {
                 'id': this._widgetData.id
             },

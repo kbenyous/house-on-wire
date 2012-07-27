@@ -9,7 +9,7 @@ var Popup_GraphClass = Popup_AbstractClass.extend({
     init: function(parameters) {
         parameters = $.parseJSON(unescape(parameters));
         this._content = '<iframe frameborder="0" scrolling="no" width="' + this._width + '" height="' + this._height + '" ' +
-                                'src="http://home.vitre.info/onewire/chart.php?id=' + parameters.id + '"></iframe>';
+                                'src="/chart.php?id=' + parameters.id + '"></iframe>';
 
         this._super(parameters);
     }
