@@ -15,7 +15,7 @@ regroupement text
 
 COMMENT ON COLUMN onewire_meta.regroupement IS 'etage, rdc, null';
 
-INSERT INTO onewire_meta ( id, top, "left", level, regroupement)
+/*INSERT INTO onewire_meta ( id, top, "left", level, regroupement)
 VALUES
 ('10.C0625A020800', 200, 594, 1, 'Etage'),
 ('10.28BD65020800', 245, 430, 1, 'Etage'),
@@ -30,3 +30,4 @@ VALUES
 ('28.BB1A53030000', 380, 860, 0, null),
 ('22.587D2F000000', 270, 760, 0, null),
 ('28.BB1A53030000', 380, 860, 2, null);
+*/
