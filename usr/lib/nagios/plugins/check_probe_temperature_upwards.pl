@@ -62,7 +62,7 @@ SWITCH: {
 		last SWITCH;
 	};
 	($temperature > $critical)  && do {
-		print "CRITICAL: $temperature > $critical.";
+		print "CRITICAL: $temperature > $critical";
 		exit $STATE_CRITICAL;
 		last SWITCH;
 	};
