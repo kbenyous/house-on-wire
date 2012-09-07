@@ -129,7 +129,7 @@
                         background: url('/image/increase-decrease.png') -13px 0px no-repeat transparent;
                     }
                     .widgets .widget .tooltipAnchor .widgetContent .widgetDelta .widgetDeltaImageMin.decrease {
-                        background: url('/image/increase-decrease.png') -13px 0px no-repeat transparent;
+                        background: url('/image/temp_blue.png') 0px 0px no-repeat transparent;
                     }
 
 
@@ -137,7 +137,7 @@
                         background: url('/image/increase-decrease.png') 0px 0px no-repeat transparent;
                     }
                     .widgets .widget .tooltipAnchor .widgetContent .widgetDelta .widgetDeltaImageMax.increase {
-                        background: url('/image/increase-decrease.png') 0px 0px no-repeat transparent;
+                        background: url('/image/temp_red.png') 0px 0px no-repeat transparent;
                     }
 
                     .widgets .widget .tooltipAnchor .widgetContent .widgetDelta .widgetDeltaValue {

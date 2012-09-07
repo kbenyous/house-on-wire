@@ -42,8 +42,6 @@ while ($row = pg_fetch_array($result))
 
         array_push($widgetsData, $tmp);
 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +62,8 @@ while ($row = pg_fetch_array($result))
     </head>
     <body>
         <div id="background">
-            <h1 id="pageTitle"><?= $pageTitle; ?></h1>
+<img scr="/image/house.png"/>
+    <h1 id="pageTitle"><?= $pageTitle; ?></h1>
             <div class="tabs">
                 <div class="tabsButtons">
     
@@ -72,7 +71,6 @@ while ($row = pg_fetch_array($result))
                     <div class="tab level2 selected" data-tab-name="level2">
                         Vue d'ensemble
                     </div>
-
 	            <div class="tab level0" data-tab-name="level0">
                         Rez de chaussée
                     </div>
@@ -93,7 +91,56 @@ while ($row = pg_fetch_array($result))
                 </div>
                 <div class="tabsContainers">
                     <div class="tabBody level2">
-                        <div id="level2" class="widgets"></div>
+                        <div id="level2" class="widgets">
+
+<div id="widget999" style="top: 10px; left: 10px;" class="widget">
+	<span class="widgetTitle">Rez de Chaussée</span><span> : </span><span class="widgetTemperatureValue">23.06</span><span>&nbsp;</span><span>C</span>
+	<div class="tooltipAnchor">
+		<img class="tooltipHandle" src="/image/info.png">
+		<div class="tooltipContent">
+			<p class="widgetContentTitle">Rez de Chaussée : <span class="widgetUpdate">07-09-2012 15:38</span></p>
+			<div class="widgetContent">
+				<div class="widgetTemperature">
+					<p class="widgetTemperatureThermometer red">&nbsp;</p>
+					<p class="widgetTemperatureValue">23.06</p><p class="widgetTemperatureUnit">C</p>
+				</div>
+				<div class="widgetDelta">
+					<p class="widgetDeltaTitle">Moyenne :</p>
+					<div class="widgetDeltaPlusOneHour">
+						<p class="widgetDeltaFrequency">1h</p>
+						<p class="widgetDeltaImage increase">&nbsp;</p>
+						<p class="widgetDeltaValue">22.96</p>
+						<p class="widgetDeltaUnit">C</p>
+					</div>
+					<div class="widgetDeltaPlusOneDay">
+						<p class="widgetDeltaFrequency">1j</p>
+						<p class="widgetDeltaImage decrease">&nbsp;</p>
+						<p class="widgetDeltaValue">23.19</p>
+						<p class="widgetDeltaUnit">C</p>
+					</div>
+					<p class="widgetDeltaTitle">Min / Max 24H :</p>
+					<div class="widgetDeltaPlusOneDay">
+						<p class="widgetDeltaImageMax increase">&nbsp;</p>
+						<p class="widgetDeltaValueMax">26</p>
+						<p class="widgetDeltaUnit">C</p>
+					</div>
+					<div class="widgetDeltaPlusOneDay">
+						<p class="widgetDeltaImageMin decrease">&nbsp;</p>
+						<p class="widgetDeltaValueMin">20.06</p>
+						<p class="widgetDeltaUnit">C</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<img class="popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22RdC%22%7D" src="/image/graph.png">
+	<br/>
+        <span class="widgetTitle">Rez de Chaussée</span><span> : </span><span class="widgetTemperatureValue">23.06</span><span>&nbsp;</span><span>C</span>
+
+</div>
+
+
+			</div>
                     </div>
                     <div class="tabBody level0 hidden">
                         <div id="level0" class="widgets"></div>
@@ -110,15 +157,15 @@ while ($row = pg_fetch_array($result))
                     </div>
                     <div class="tabBody graph_papp hidden">
                         <div id="graph_papp">
-                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                            <!--iframe frameborder="0" scrolling="no" width="1200px" 
                                     height="630px" src="/chart_papp.php">
-                            </iframe>
+                            </iframe-->
                         </div>
                     </div>
                     <div class="tabBody graph_lumi hidden">
                         <div id="graph_lumi">
                             <iframe frameborder="0" scrolling="no" width="1200px" 
-                                    height="630px" src="/chart.php?id=26.2FAE60010000">
+                                    height="630px" src="/chart.php?id=26.24AE60010000">
                             </iframe>
                         </div>
                     </div>

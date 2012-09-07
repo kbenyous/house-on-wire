@@ -1,4 +1,7 @@
 <?php
+
+if(!ob_start("ob_gzhandler")) ob_start();
+
 /*
 	Fichier de génération des données au format CSV
 
