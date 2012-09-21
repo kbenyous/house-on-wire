@@ -1,8 +1,8 @@
 <html>
 <head>
-     	<title>House-On-Wire</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="js/dygraph-combined.js"></script>
+         <title>House-On-Wire</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="js/dygraph-combined.js"></script>
 </head>
 <body>
 <div id="graphdiv" style="width:1150px; height:550px;"></div>
@@ -19,17 +19,17 @@ $date = pg_fetch_array($result);
 <script type="text/javascript">
 
 g = new Dygraph(
-	// containing div
-	document.getElementById("graphdiv"),
-	'/get_data_csv.php?type=papp_full',
-	{
-		title: 'Puissance instantanée',
-		ylabel: 'PAPP (W)',
-		legend: 'always',
-		labelsDivStyles: { 'textAlign': 'right' },
-		showRangeSelector: true,
-		dateWindow:[<?=$date['start_date']?>, <?=$date['finish_date']?>]
-	}		 
+    // containing div
+    document.getElementById("graphdiv"),
+    '/get_data_csv.php?type=papp_full',
+    {
+        title: 'Puissance instantanée',
+        ylabel: 'PAPP (W)',
+        legend: 'always',
+        labelsDivStyles: { 'textAlign': 'right' },
+        showRangeSelector: true,
+        dateWindow:[<?=$date['start_date']?>, <?=$date['finish_date']?>]
+    }
   );
 
 </script>

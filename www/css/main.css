@@ -97,3 +97,8 @@ hr {
     font-size: 2em;
     padding: 20px 30px;
 }
+
+    #pageTitle * {
+        vertical-align: middle;
+        display: inline-block;
+    }

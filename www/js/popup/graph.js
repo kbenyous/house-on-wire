@@ -5,11 +5,11 @@ var Popup_GraphClass = Popup_AbstractClass.extend({
     _title: 'Graph',
     _width: 840,
     _height: 620,
-    
+
     init: function(parameters) {
         parameters = $.parseJSON(unescape(parameters));
         this._content = '<iframe frameborder="0" scrolling="no" width="' + this._width + '" height="' + this._height + '" ' +
-                                'src="/chart.php?id=' + parameters.id + '"></iframe>';
+                                'src="/php/chart.php?id=' + parameters.id + '"></iframe>';
 
         this._super(parameters);
     }

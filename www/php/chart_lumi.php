@@ -1,8 +1,8 @@
 <html>
 <head>
-     	<title>House-On-Wire</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="js/dygraph-combined.js"></script>
+         <title>House-On-Wire</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="js/dygraph-combined.js"></script>
 </head>
 <body>
 <div id="graphdiv" style="width:800px; height:600px; "></div>
@@ -20,7 +20,7 @@
 title: 'Test',
 legend: 'always',
 labelsSeparateLines: true
-} 
+}
   );
 
   g1 = new Dygraph(
@@ -32,7 +32,7 @@ labelsSeparateLines: true
 title: 'Test',
 legend: 'always',
 labelsSeparateLines: true
-} 
+}
   );
 
 

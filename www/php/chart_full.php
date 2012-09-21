@@ -1,8 +1,8 @@
 <html>
 <head>
-     	<title>House-On-Wire</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="js/dygraph-combined.js"></script>
+         <title>House-On-Wire</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="js/dygraph-combined.js"></script>
 
 <style type='text/css'>
      #labels > span.highlight { border: 1px solid grey; }
@@ -25,10 +25,10 @@ $labels = array();
 array_push($labels, '"Date"');
 while ($row = pg_fetch_array($result))
 {
-	echo '<input id="'.$i.'" type="checkbox" checked="" onclick="change(this)">';
-	echo '<label for="'.$i.'"> '.$row['name'].'</label>';
-	array_push($labels, '"'.$row['name'].'"');
-	$i++;
+    echo '<input id="'.$i.'" type="checkbox" checked="" onclick="change(this)">';
+    echo '<label for="'.$i.'"> '.$row['name'].'</label>';
+    array_push($labels, '"'.$row['name'].'"');
+    $i++;
 }
 
 
@@ -63,12 +63,12 @@ labelsDivStyles: { 'textAlign': 'right' },
           highlightCircleSize: 5,
         },
 
-} 
+}
   );
 
 function change(el) {
 g.setVisibility(el.id, el.checked);
-} 
+}
 
 </script>
 </body>

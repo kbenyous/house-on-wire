@@ -1,0 +1,51 @@
+#dashboard {
+    border: 1px solid #3e6778;
+    border-radius: 4px 4px 4px 4px;
+    padding: 2px 20px 5px 5px;
+    background-color: white;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+    #dashboard #dashboardTitle {
+        font-weight: bold;
+        padding: 4px 2px;
+        font-size: 1.2em;
+    }
+
+    #dashboard #dashboardBody {
+    }
+
+        #dashboard #dashboardBody .dashboardLine {
+            padding: 4px 2px;
+        }
+
+            #dashboard #dashboardBody .dashboardLine .dashboardLineTitle {
+                font-weight: bold;
+            }
+
+            #dashboard #dashboardBody .dashboardLine .tooltipAnchor {
+                position: relative;
+                top: 3px;
+                left: 10px;
+            }
+
+                #dashboard #dashboardBody .dashboardLine .dashboardTooltipTitle {
+                    font-weight: bold;
+                    padding: 0px 0px 10px 0px;
+                }
+
+                #dashboard #dashboardBody .dashboardLine .dashboardTooltipContent {
+                }
+
+                    #dashboard #dashboardBody .dashboardLine .dashboardTooltipContent .dashboardTooltipContentLine {
+                        padding: 0px 0px 4px 0px;
+                    }
+
+            #dashboard #dashboardBody .dashboardLine .popupLink {
+                position: relative;
+                top: 3px;
+                left: 15px;
+                border-bottom: none;
+            }
