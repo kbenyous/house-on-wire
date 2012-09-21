@@ -1,6 +1,6 @@
 var widgetClass = AbstractClass.extend({
     _timer: null,
-    _timerInterval: 60000,
+    _timerInterval: 300000,
     _widgetData: null,
 
     init: function(widgetData) {
@@ -9,7 +9,7 @@ var widgetClass = AbstractClass.extend({
 
         this._timer = window.setInterval(
             this.getData.bind(this),
-            this._timerInterval + Math.floor(Math.random() * 10000000)
+            this._timerInterval + Math.floor(Math.random() * 5000)
         );
 
         this.createLayout();
@@ -98,8 +98,10 @@ var widgetClass = AbstractClass.extend({
     },
 
     fillUp: function(response) {
-        var widget = $('#widget' + this._widgetData.domId);
+	var widget = $('#widget' + this._widgetData.domId);
         if(widget.length > 0) {
+
+$('#txt_log').val($('#txt_log').val() + "\n" + js_yyyy_mm_dd_hh_mm_ss()  + " : Mise à jour de infos de la sonde " + this._widgetData.id + "(" + this._widgetData.title + ")");
             $(widget).find('.widgetUpdate').html(response.maj.value);
 
 
@@ -152,3 +154,15 @@ var widgetClass = AbstractClass.extend({
         new widgetClass(window.widgetsData[widgetDataIndex]);
     }
 })();
+
+
+function js_yyyy_mm_dd_hh_mm_ss () {
+  now = new Date();
+  year = "" + now.getFullYear();
+  month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+  day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+  hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+  minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+  second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+}

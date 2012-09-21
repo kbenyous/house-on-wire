@@ -62,8 +62,7 @@ while ($row = pg_fetch_array($result))
     </head>
     <body>
         <div id="background">
-<img scr="/image/house.png"/>
-    <h1 id="pageTitle"><?= $pageTitle; ?></h1>
+    <h1 id="pageTitle"><img src="/image/house.png"/><?= $pageTitle; ?></h1>
             <div class="tabs">
                 <div class="tabsButtons">
     
@@ -86,24 +85,23 @@ while ($row = pg_fetch_array($result))
                     <div class="tab graph_lumi" data-tab-name="graph_lumi">
                         Graph Luminosite
                     </div>
-
+                    <div class="tab logs" data-tab-name="logs">
+                        Logs
+                    </div>
+		
 
                 </div>
                 <div class="tabsContainers">
                     <div class="tabBody level2">
                         <div id="level2" class="widgets">
 
-<div id="widget999" style="top: 10px; left: 10px;" class="widget">
+<div id="widget999" style="top: 450px; left: 10px;" class="widget">
 	<span class="widgetTitle">Rez de Chaussée</span><span> : </span><span class="widgetTemperatureValue">23.06</span><span>&nbsp;</span><span>C</span>
 	<div class="tooltipAnchor">
 		<img class="tooltipHandle" src="/image/info.png">
 		<div class="tooltipContent">
 			<p class="widgetContentTitle">Rez de Chaussée : <span class="widgetUpdate">07-09-2012 15:38</span></p>
 			<div class="widgetContent">
-				<div class="widgetTemperature">
-					<p class="widgetTemperatureThermometer red">&nbsp;</p>
-					<p class="widgetTemperatureValue">23.06</p><p class="widgetTemperatureUnit">C</p>
-				</div>
 				<div class="widgetDelta">
 					<p class="widgetDeltaTitle">Moyenne :</p>
 					<div class="widgetDeltaPlusOneHour">
@@ -169,6 +167,9 @@ while ($row = pg_fetch_array($result))
                             </iframe>
                         </div>
                     </div>
+                    <div class="tabBody logs hidden">
+                    <textarea id="txt_log" style="width: 1180px; height: 630px; "></textarea>
+			</div>
 
                 </div>
             </div>
