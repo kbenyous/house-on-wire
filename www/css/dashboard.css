@@ -4,26 +4,37 @@
     padding: 2px 20px 5px 5px;
     background-color: white;
     position: absolute;
-    top: 50px;
+    top: 350px;
     left: 50px;
 }
 
     #dashboard #dashboardTitle {
         font-weight: bold;
         padding: 4px 2px;
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
 
     #dashboard #dashboardBody {
     }
 
+
+        #dashboard #dashboardBody .dashboardToolbar {
+            padding: 4px 2px;
+	}
+
         #dashboard #dashboardBody .dashboardLine {
             padding: 4px 2px;
+	    font-size: 1.2em;
         }
 
             #dashboard #dashboardBody .dashboardLine .dashboardLineTitle {
                 font-weight: bold;
             }
+
+            #dashboard #dashboardBody .dashboardLine .dashboardLineTitleImg {
+		vertical-align: middle;
+		padding: 0 10px 0 0;
+	}
 
             #dashboard #dashboardBody .dashboardLine .tooltipAnchor {
                 position: relative;

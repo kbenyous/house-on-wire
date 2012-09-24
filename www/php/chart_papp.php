@@ -2,7 +2,7 @@
 <head>
          <title>House-On-Wire</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="js/dygraph-combined.js"></script>
+    <script type="text/javascript" src="/js/dygraph-combined.js"></script>
 </head>
 <body>
 <div id="graphdiv" style="width:1150px; height:550px;"></div>
@@ -21,7 +21,7 @@ $date = pg_fetch_array($result);
 g = new Dygraph(
     // containing div
     document.getElementById("graphdiv"),
-    '/get_data_csv.php?type=papp_full',
+    '/php/get_data_csv.php?type=papp_full',
     {
         title: 'Puissance instantanée',
         ylabel: 'PAPP (W)',

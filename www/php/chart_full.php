@@ -2,7 +2,7 @@
 <head>
          <title>House-On-Wire</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="js/dygraph-combined.js"></script>
+    <script type="text/javascript" src="/js/dygraph-combined.js"></script>
 
 <style type='text/css'>
      #labels > span.highlight { border: 1px solid grey; }
@@ -43,7 +43,7 @@ while ($row = pg_fetch_array($result))
     // containing div
     document.getElementById("graphdiv"),
 //"data.csv",
-'/get_data_csv.php?type=temp_full&sonde=all',
+'/php/get_data_csv.php?type=temp_full&sonde=all',
 {
 title: 'Historique des températures par pièce',
 label: [<?=implode($labels, ',');?>],

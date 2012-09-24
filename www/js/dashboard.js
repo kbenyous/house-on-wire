@@ -21,7 +21,7 @@ new (AbstractClass.extend({
     createLayout : function() {
         $('#global').append(
             '<div id="dashboard">' +
-                '<p id="dashboardTitle">Dashboard</p>' +
+                '<p id="dashboardTitle">Informations</p>' +
                 '<div id="dashboardBody"></div>' +
             '</div>'
         );
@@ -39,9 +39,9 @@ new (AbstractClass.extend({
         for(lineName in response) {
             switch(lineName) {
                 case 'electricity': {
-                    dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<span class="dashboardLineTitle">Electricité</span>' +
-                        '<span> : </span>' +
+			dashboardBodyContent += '<div class="dashboardLine">' +
+                        '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité"/>' +
+			'<span class="dashboardLineTitle"></span>' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -63,14 +63,14 @@ new (AbstractClass.extend({
                                 '</div>' +
                            '</div>' +
                        '</div>' +
-                       '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png" />' +
+                       '<img class="popupLink" data-type="graphpapp" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png" />' +
                    '</div>';
                     break;
                 }
                 case 'water': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<span class="dashboardLineTitle">Eau</span>' +
-                        '<span> : </span>' +
+                        '<img class="dashboardLineTitleImg" src="/image/water.png"  title="Eau" alt="Eau"/>' +
+                        '<span class="dashboardLineTitle"></span>' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -85,9 +85,13 @@ new (AbstractClass.extend({
                     break;
                 }
                 case 'luminosity': {
+
+		        var widgetParameters = {
+		            'id' : '26.24AE60010000'
+		        }
                     dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<span class="dashboardLineTitle">Luminosité</span>' +
-                        '<span> : </span>' +
+                        '<img class="dashboardLineTitleImg" src="/image/contraste.png"  title="Luminosité" alt="Luminosité"/>' +
+                        '<span class="dashboardLineTitle"></span>' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -97,12 +101,18 @@ new (AbstractClass.extend({
                                 '<p class="dashboardTooltipTitle">Historique</p>' +
                            '</div>' +
                        '</div>' +
-                       '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png" />' +
+                       '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/graph.png" />' +
                    '</div>';
                     break;
                 }
             }
         }
+
+	dashboardBodyContent += '<hr>' +
+			'<div class="dashboardToolbar">' +
+				'<img class="popupLink" data-type="graphfull" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/temp.png" alt="Comparaison des températures" title="Comparaison des températures" />' +
+			'</div>';
+
         $('#dashboardBody').html(dashboardBodyContent);
     },
 

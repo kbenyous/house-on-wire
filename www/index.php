@@ -7,8 +7,8 @@
         'dbname='.$config['bdd']['dbname'].' '.
         'user='.$config['bdd']['username'].' '.
         'password='.$config['bdd']['password'].' '.
-        'options="--client_encoding=UTF8"'
-    ) or die('Erreur de connexion au serveur SQL');
+        'options=\'--client_encoding=UTF8\''
+    ) or die('Erreur de connexion au serveur SQLfgsdf');
     $result = pg_query(
         $db,
         'select * from onewire_meta join onewire using (id)'
@@ -25,6 +25,31 @@
             'level' => $row['level']
         );
     }
+
+
+       $tmp = array();		
+			
+	        $tmp['id'] = 'RdC';		
+	        $tmp['title'] = 'Rez de Chaussée';		
+	        $tmp['unit'] = 'C';		
+	        $tmp['top'] = 340;		
+	        $tmp['left'] = 510;		
+	        $tmp['level'] = 'global';		
+			
+	        array_push($widgetsData, $tmp);		
+			
+	        $tmp = array();		
+			
+	        $tmp['id'] = 'Etage';		
+	        $tmp['title'] = 'Etage';		
+	        $tmp['unit'] = 'C';		
+	        $tmp['top'] = 265;		
+	        $tmp['left'] = 610;		
+	        $tmp['level'] = 'global';		
+			
+	        array_push($widgetsData, $tmp);		
+	
+
 ?>
 
 <!DOCTYPE html>
@@ -61,15 +86,6 @@
                     <div class="tab level1" data-tab-name="level1">
                         Etage
                     </div>
-                    <div class="tab graph" data-tab-name="graph">
-                        Graph général Température
-                    </div>
-                    <div class="tab graph_papp" data-tab-name="graph_papp">
-                        Graph Consommation
-                    </div>
-                    <div class="tab graph_lumi" data-tab-name="graph_lumi">
-                        Graph Luminosite
-                    </div>
                     <div class="tab logs" data-tab-name="logs">
                         Logs
                     </div>
@@ -83,25 +99,6 @@
                     </div>
                     <div class="tabBody level1 hidden">
                         <div id="level1" class="widgets"></div>
-                    </div>
-                    <div class="tabBody graph hidden">
-                        <div id="graph">
-                            <iframe frameborder="0" scrolling="no" width="1200px"
-                            height="630px" src="/php/chart_full.php"></iframe>
-                        </div>
-                    </div>
-                    <div class="tabBody graph_papp hidden">
-                        <div id="graph_papp">
-                            <!--iframe frameborder="0" scrolling="no" width="1200px"
-                            height="630px" src="/php/chart_papp.php">
-                            </iframe-->
-                        </div>
-                    </div>
-                    <div class="tabBody graph_lumi hidden">
-                        <div id="graph_lumi">
-                            <iframe frameborder="0" scrolling="no" width="1200px"
-                            height="630px" src="/php/chart.php?id=26.24AE60010000"></iframe>
-                        </div>
                     </div>
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
@@ -124,6 +121,8 @@
         <script type="text/javascript" src="/js/popup.js"></script>
         <script type="text/javascript" src="/js/popup/abstract.js"></script>
         <script type="text/javascript" src="/js/popup/graph.js"></script>
+        <script type="text/javascript" src="/js/popup/graphpapp.js"></script>
+        <script type="text/javascript" src="/js/popup/graphfull.js"></script>
         <script type="text/javascript" src="/js/log.js"></script>
         <script type="text/javascript" src="/js/dashboard.js"></script>
         <script type="text/javascript" src="/js/widget.js"></script>

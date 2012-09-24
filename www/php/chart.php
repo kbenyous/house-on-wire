@@ -2,7 +2,7 @@
 <head>
          <title>House-On-Wire</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="js/dygraph-combined.js"></script>
+    <script type="text/javascript" src="/js/dygraph-combined.js"></script>
 </head>
 <body>
 <div id="graphdiv" style="width:800px; height:300px;"></div>
@@ -44,7 +44,7 @@ $date = pg_fetch_array($result);
 g = new Dygraph(
     // containing div
     document.getElementById("graphdiv"),
-    '/get_data_csv.php?type=last_days&sonde=<?=$_GET['id']?>',
+    '/php/get_data_csv.php?type=last_days&sonde=<?=$_GET['id']?>',
     {
         customBars: true,
         title: '<?=$info_sonde['name']?>',
@@ -60,7 +60,7 @@ g = new Dygraph(
 g2 = new Dygraph(
     // containing div
     document.getElementById("graphdiv2"),
-        '/get_data_csv.php?type=full&sonde=<?=$_GET['id']?>',
+        '/php/get_data_csv.php?type=full&sonde=<?=$_GET['id']?>',
     {
         customBars: true,
         title: '<?=$info_sonde['name']?>',
