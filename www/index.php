@@ -11,7 +11,7 @@
     ) or die('Erreur de connexion au serveur SQLfgsdf');
     $result = pg_query(
         $db,
-        'select * from onewire_meta join onewire using (id)'
+        'select id, coalesce(o.name, om.name) as name, coalesce(o.unity, om.unity) as unity , top, "left", level from onewire_meta om left join onewire o using (id)'
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 
     $widgetsData = array();
@@ -25,31 +25,6 @@
             'level' => $row['level']
         );
     }
-
-
-       $tmp = array();		
-			
-	        $tmp['id'] = 'RdC';		
-	        $tmp['title'] = 'Rez de Chaussée';		
-	        $tmp['unit'] = 'C';		
-	        $tmp['top'] = 340;		
-	        $tmp['left'] = 510;		
-	        $tmp['level'] = 'global';		
-			
-	        array_push($widgetsData, $tmp);		
-			
-	        $tmp = array();		
-			
-	        $tmp['id'] = 'Etage';		
-	        $tmp['title'] = 'Etage';		
-	        $tmp['unit'] = 'C';		
-	        $tmp['top'] = 265;		
-	        $tmp['left'] = 610;		
-	        $tmp['level'] = 'global';		
-			
-	        array_push($widgetsData, $tmp);		
-	
-
 ?>
 
 <!DOCTYPE html>
