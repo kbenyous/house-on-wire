@@ -1,7 +1,7 @@
 #dashboard {
-    border: 1px solid #3e6778;
-    border-radius: 4px 4px 4px 4px;
-    padding: 2px 20px 5px 5px;
+    border: 3px solid #3e6778;
+    border-radius: 8px 8px 8px 8px;
+    padding: 5px 5px 5px 5px;
     background-color: white;
     position: absolute;
     top: 350px;
@@ -15,11 +15,21 @@
     }
 
     #dashboard #dashboardBody {
-    }
+    	width: 180px;
+	}
+
+
+        #dashboard #dashboardBody .dashboardHr{
+
+	    border-bottom:  1px solid #3e6778;
+		margin-left: -5px;
+		margin-right: -5px;
+
+        }
 
 
         #dashboard #dashboardBody .dashboardToolbar {
-            padding: 4px 2px;
+            padding: 4px 4px 0px 4px;
 	}
 
         #dashboard #dashboardBody .dashboardLine {

@@ -108,7 +108,7 @@ new (AbstractClass.extend({
             }
         }
 
-	dashboardBodyContent += '<hr>' +
+	dashboardBodyContent += '<div class="dashboardHr"></div>' +
 			'<div class="dashboardToolbar">' +
 				'<img class="popupLink" data-type="graphfull" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/temp.png" alt="Comparaison des températures" title="Comparaison des températures" />' +
 			'</div>';
