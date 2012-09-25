@@ -23,6 +23,11 @@ new (AbstractClass.extend({
             '<div id="dashboard">' +
                 '<p id="dashboardTitle">Informations</p>' +
                 '<div id="dashboardBody"></div>' +
+                '<div id="dashboardHr">&nbsp;</div>' +
+                '<div id="dashboardToolbar">' +
+                    '<img class="popupLink" data-type="graphfull" src="/image/temp.png" ' +
+                         'alt="Comparaison des températures" title="Comparaison des températures" />' +
+                '</div>' +
             '</div>'
         );
     },
@@ -39,9 +44,8 @@ new (AbstractClass.extend({
         for(lineName in response) {
             switch(lineName) {
                 case 'electricity': {
-			dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité"/>' +
-			'<span class="dashboardLineTitle"></span>' +
+                    dashboardBodyContent += '<div class="dashboardLine">' +
+                        '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité" />' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -69,8 +73,7 @@ new (AbstractClass.extend({
                 }
                 case 'water': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<img class="dashboardLineTitleImg" src="/image/water.png"  title="Eau" alt="Eau"/>' +
-                        '<span class="dashboardLineTitle"></span>' +
+                        '<img class="dashboardLineTitleImg" src="/image/water.png" title="Eau" alt="Eau" />' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -85,13 +88,11 @@ new (AbstractClass.extend({
                     break;
                 }
                 case 'luminosity': {
-
-		        var widgetParameters = {
-		            'id' : '26.24AE60010000'
-		        }
+                    var widgetParameters = {
+                        'id' : '26.24AE60010000'
+                    }
                     dashboardBodyContent += '<div class="dashboardLine">' +
-                        '<img class="dashboardLineTitleImg" src="/image/contraste.png"  title="Luminosité" alt="Luminosité"/>' +
-                        '<span class="dashboardLineTitle"></span>' +
+                        '<img class="dashboardLineTitleImg" src="/image/contraste.png" title="Luminosité" alt="Luminosité" />' +
                         '<span>' + response[lineName].current.value + '</span>' +
                         '<span>&nbsp;</span>' +
                         '<span>' + response[lineName].current.unit + '</span>' +
@@ -107,11 +108,6 @@ new (AbstractClass.extend({
                 }
             }
         }
-
-	dashboardBodyContent += '<div class="dashboardHr"></div>' +
-			'<div class="dashboardToolbar">' +
-				'<img class="popupLink" data-type="graphfull" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/temp.png" alt="Comparaison des températures" title="Comparaison des températures" />' +
-			'</div>';
 
         $('#dashboardBody').html(dashboardBodyContent);
     },

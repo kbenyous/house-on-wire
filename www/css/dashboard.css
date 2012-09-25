@@ -15,36 +15,18 @@
     }
 
     #dashboard #dashboardBody {
-    	width: 180px;
-	}
-
-
-        #dashboard #dashboardBody .dashboardHr{
-
-	    border-bottom:  1px solid #3e6778;
-		margin-left: -5px;
-		margin-right: -5px;
-
-        }
-
-
-        #dashboard #dashboardBody .dashboardToolbar {
-            padding: 4px 4px 0px 4px;
-	}
+        width: 180px;
+    }
 
         #dashboard #dashboardBody .dashboardLine {
             padding: 4px 2px;
-	    font-size: 1.2em;
+            font-size: 1.2em;
         }
 
-            #dashboard #dashboardBody .dashboardLine .dashboardLineTitle {
-                font-weight: bold;
-            }
-
             #dashboard #dashboardBody .dashboardLine .dashboardLineTitleImg {
-		vertical-align: middle;
-		padding: 0 10px 0 0;
-	}
+                vertical-align: middle;
+                padding: 0 10px 0 0;
+            }
 
             #dashboard #dashboardBody .dashboardLine .tooltipAnchor {
                 position: relative;
@@ -70,3 +52,14 @@
                 left: 15px;
                 border-bottom: none;
             }
+
+    #dashboard #dashboardHr{
+        border-top:  1px solid #3e6778;
+        margin: 10px -5px 0px -5px;
+        padding-bottom: 9px;
+        height: 0px;
+    }
+
+    #dashboard #dashboardToolbar {
+        padding: 4px;
+    }

@@ -296,6 +296,20 @@ var Popup_AbstractClass = AbstractClass.extend({
         }
 
         var websiteDimensions = this.getWebsiteDimensions();
+        
+        var popupBody = $('#popupBody');
+        if(popupBody.length != 0) {
+            websiteDimensions.width = Math.max(
+                websiteDimensions.width,
+                $(popupBody).width() + 2 * this._border
+            );
+            
+            websiteDimensions.height = Math.max(
+                websiteDimensions.height,
+                $(popupBody).height() + 2 * this._border
+            );
+        }
+
         popup.css('width', websiteDimensions.width + 'px')
         .css('height', websiteDimensions.height + 'px');
         return true;
