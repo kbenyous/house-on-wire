@@ -46,14 +46,18 @@ new (AbstractClass.extend({
                 case 'electricity': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+				'<span>' + response[lineName].current.value + '</span>' +
+	                        '<span>&nbsp;</span>' +
+        	                '<span>' + response[lineName].current.unit + '</span>' +
                         '<div class="tooltipAnchor">' +
                             '<img class="tooltipHandle" src="/image/info.png" />' +
                             '<div class="tooltipContent">' +
-                                '<p class="dashboardTooltipTitle">Historique</p>' +
+                                '<p class="dashboardTooltipTitle">Détail</p>' +
                                 '<div class="dashboardTooltipContent">' +
+                                    '<div class="dashboardTooltipContentLine">' +
+                                        'Aujourd\'hui : ' +
+                                        response[lineName].power.today + ' ' + response[lineName].power.unit + '&nbsp;' +
+                                    '</div>' +
                                     '<div class="dashboardTooltipContentLine">' +
                                         'Hier : ' +
                                         response[lineName].power.yesterday + ' ' + response[lineName].power.unit + '&nbsp;/&nbsp;' +
@@ -67,16 +71,17 @@ new (AbstractClass.extend({
                                 '</div>' +
                            '</div>' +
                        '</div>' +
-                       '<img class="popupLink" data-type="graphpapp" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png" />' +
-                   '</div>';
+                       '<img class="popupLink" data-type="graphpapp" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png" alt="Graphique de conso instantanée" title="Graphique de conso instantanée"/>' +
+                       '<img class="popupLink" data-type="graphconsoelect" data-parameters="' + escape(JSON.stringify(response[lineName].graph)) + '" src="/image/graph.png"  alt="Historique de consommation" title="Historique de consommation"/>' +
+           	'</div>';
                     break;
                 }
                 case 'water': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/water.png" title="Eau" alt="Eau" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+                        	'<span>' + response[lineName].current.value + '</span>' +
+	                        '<span>&nbsp;</span>' +
+        	                '<span>' + response[lineName].current.unit + '</span>' +
                         '<div class="tooltipAnchor">' +
                             '<img class="tooltipHandle" src="/image/info.png" />' +
                             '<div class="tooltipContent">' +
@@ -93,9 +98,9 @@ new (AbstractClass.extend({
                     }
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/contraste.png" title="Luminosité" alt="Luminosité" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+	                        '<span>' + response[lineName].current.value + '</span>' +
+        	                '<span>&nbsp;</span>' +
+                	        '<span>' + response[lineName].current.unit + '</span>' +
                         '<div class="tooltipAnchor">' +
                             '<img class="tooltipHandle" src="/image/info.png" />' +
                             '<div class="tooltipContent">' +

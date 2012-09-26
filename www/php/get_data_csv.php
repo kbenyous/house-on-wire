@@ -242,6 +242,29 @@ switch($type)
 
                 break;
 
+	case 'conso_elect' :
+		echo "Date".$s_separateur."Heures Pleines".$s_separateur."Heures Creuses".$s_fin_ligne;
+
+               $query = "
+	             SELECT
+                                date,
+                                trunc(hchp::numeric/1000, 2) AS hchp,
+				trunc(hchc::numeric/1000, 2) AS hchc
+                          FROM teleinfo_cout
+                	ORDER BY date";
+
+               $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+
+                while ($row = pg_fetch_array($result))
+                {
+                        echo $row['date'].$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_fin_ligne;
+
+                }
+
+		// Insertion d'une fausse ligne pour la journée en court pour afficher la barre sur le graph
+		$row = pg_fetch_array($result, pg_num_rows($result)-1);		
+		echo date('Y-m-d 00:00:00').$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_fin_ligne;
+              break;
 
 }
 
