@@ -55,10 +55,6 @@ new (AbstractClass.extend({
                                 '<p class="dashboardTooltipTitle">Détail</p>' +
                                 '<div class="dashboardTooltipContent">' +
                                     '<div class="dashboardTooltipContentLine">' +
-                                        'Aujourd\'hui : ' +
-                                        response[lineName].power.today + ' ' + response[lineName].power.unit + '&nbsp;' +
-                                    '</div>' +
-                                    '<div class="dashboardTooltipContentLine">' +
                                         'Hier : ' +
                                         response[lineName].power.yesterday + ' ' + response[lineName].power.unit + '&nbsp;/&nbsp;' +
                                         response[lineName].cost.yesterday + ' ' + response[lineName].cost.unit +
@@ -76,7 +72,9 @@ new (AbstractClass.extend({
            	'</div>';
                     break;
                 }
-                case 'water': {
+                
+/*
+		case 'water': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/water.png" title="Eau" alt="Eau" />' +
                         	'<span>' + response[lineName].current.value + '</span>' +
@@ -92,7 +90,8 @@ new (AbstractClass.extend({
                    '</div>';
                     break;
                 }
-                case 'luminosity': {
+*/  
+               case 'luminosity': {
                     var widgetParameters = {
                         'id' : '26.24AE60010000'
                     }
@@ -101,12 +100,6 @@ new (AbstractClass.extend({
 	                        '<span>' + response[lineName].current.value + '</span>' +
         	                '<span>&nbsp;</span>' +
                 	        '<span>' + response[lineName].current.unit + '</span>' +
-                        '<div class="tooltipAnchor">' +
-                            '<img class="tooltipHandle" src="/image/info.png" />' +
-                            '<div class="tooltipContent">' +
-                                '<p class="dashboardTooltipTitle">Historique</p>' +
-                           '</div>' +
-                       '</div>' +
                        '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/graph.png" />' +
                    '</div>';
                     break;
