@@ -46,9 +46,11 @@ new (AbstractClass.extend({
                 case 'electricity': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+                        '<div class="dashboardLineTitleName">' +
+                            '<span>' + response[lineName].current.value + '</span>' +
+                            '<span>&nbsp;</span>' +
+                            '<span>' + response[lineName].current.unit + '</span>' +
+                        '</div>' +
                         '<div class="tooltipAnchor">' +
                             '<img class="tooltipHandle" src="/image/info.png" />' +
                             '<div class="tooltipContent">' +
@@ -77,9 +79,11 @@ new (AbstractClass.extend({
                 case 'water': {
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/water.png" title="Eau" alt="Eau" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+                        '<div class="dashboardLineTitleName">' +
+                            '<span>' + response[lineName].current.value + '</span>' +
+                            '<span>&nbsp;</span>' +
+                            '<span>' + response[lineName].current.unit + '</span>' +
+                        '</div>' +
                         '<div class="tooltipAnchor">' +
                             '<img class="tooltipHandle" src="/image/info.png" />' +
                             '<div class="tooltipContent">' +
@@ -97,9 +101,11 @@ new (AbstractClass.extend({
                     }
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/contraste.png" title="Luminosité" alt="Luminosité" />' +
-                        '<span>' + response[lineName].current.value + '</span>' +
-                        '<span>&nbsp;</span>' +
-                        '<span>' + response[lineName].current.unit + '</span>' +
+                        '<div class="dashboardLineTitleName">' +
+                            '<span>' + response[lineName].current.value + '</span>' +
+                            '<span>&nbsp;</span>' +
+                            '<span>' + response[lineName].current.unit + '</span>' +
+                        '</div>' +
                         '<img class="popupLink" data-type="graph" data-parameters="' + escape(JSON.stringify(widgetParameters))+ '" src="/image/graph.png" />' +
                     '</div>';
                     break;
