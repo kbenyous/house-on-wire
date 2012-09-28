@@ -1,4 +1,4 @@
-var Popup_GraphconsoelectClass = Popup_AbstractClass.extend({
+var Popup_GraphPuissanceApparenteClass = Popup_AbstractClass.extend({
     _buttons: {
         'Close': 'close'
     },
@@ -9,7 +9,7 @@ var Popup_GraphconsoelectClass = Popup_AbstractClass.extend({
     init: function(parameters) {
         //parameters = $.parseJSON(unescape(parameters));
         this._content = '<iframe frameborder="0" scrolling="no" width="' + this._width + '" height="' + this._height + '" ' +
-                                'src="/php/chart_conso_elect.php"></iframe>';
+                                'src="/php/chart_papp.php"></iframe>';
 
         this._super(parameters);
     }

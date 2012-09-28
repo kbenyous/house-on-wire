@@ -1,4 +1,4 @@
-var Popup_GraphfullClass = Popup_AbstractClass.extend({
+var Popup_GraphFullClass = Popup_AbstractClass.extend({
     _buttons: {
         'Close': 'close'
     },

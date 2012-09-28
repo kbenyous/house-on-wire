@@ -96,10 +96,10 @@
         <script type="text/javascript" src="/js/popup.js"></script>
         <script type="text/javascript" src="/js/popup/abstract.js"></script>
         <script type="text/javascript" src="/js/popup/graph.js"></script>
-        <script type="text/javascript" src="/js/popup/graphpapp.js"></script>
-        <script type="text/javascript" src="/js/popup/graphfull.js"></script>
-        <script type="text/javascript" src="/js/popup/graphconsoelect.js"></script>
-	<script type="text/javascript" src="/js/log.js"></script>
+        <script type="text/javascript" src="/js/popup/graphPuissanceApparente.js"></script>
+        <script type="text/javascript" src="/js/popup/graphFull.js"></script>
+        <script type="text/javascript" src="/js/popup/graphConsoElect.js"></script>
+        <script type="text/javascript" src="/js/log.js"></script>
         <script type="text/javascript" src="/js/dashboard.js"></script>
         <script type="text/javascript" src="/js/widget.js"></script>
     </body>
