@@ -89,7 +89,6 @@
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
                     </div>
-
                 </div>
             </div>
         </div>

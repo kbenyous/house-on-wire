@@ -27,6 +27,11 @@
                 vertical-align: middle;
                 padding: 0 10px 0 0;
             }
+            
+            #dashboard #dashboardBody .dashboardLine .dashboardLineTitleName {
+                display: inline-block;
+                width: 65px;
+            }
 
             #dashboard #dashboardBody .dashboardLine .tooltipAnchor {
                 position: relative;
