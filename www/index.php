@@ -9,6 +9,50 @@
         'password='.$config['bdd']['password'].' '.
         'options=\'--client_encoding=UTF8\''
     ) or die('Erreur de connexion au serveur SQLfgsdf');
+
+    // Récuperation des levels
+    $result = pg_query(
+        $db,
+        'select level, name, image, position from level order by position'
+    ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
+
+    $css = "";
+    $tabsbuttons = "";
+    $tabscontainers = "";
+    $levels = array();
+    while($row = pg_fetch_array($result)) {
+        $levels[] = array(
+            'level' => $row['level'],
+            'name' => $row['name'],
+            'image' => $row['image'],
+            'position' => $row['position']
+        );
+
+        $css .= ".widgets#".$row['level']." {\n";
+        $css .= "background: url('".$row['image']."') left top no-repeat transparent; !important\n";
+        $css .= "}\n";
+
+        if($row["position"] == 1)
+        {
+	    $selected = "selected";
+	    $hidden = "";
+        }
+        else
+        {
+ 	    $selected = "";
+	    $hidden = "hidden";
+        }
+        $tabsbuttons .= "<div class=\"tab ".$row['level']." $selected\" data-tab-name=\"".$row['level']."\">\n";
+        $tabsbuttons .= $row['name']."\n";
+        $tabsbuttons .= "</div>\n";
+
+        $tabscontainers .= "<div class=\"tabBody ".$row['level']." $hidden\">\n";
+        $tabscontainers .= "<div id=\"".$row['level']."\" class=\"widgets\"></div>\n";
+        $tabscontainers .= "</div>\n";
+
+    }
+
+    // Récupération des sondes
     $result = pg_query(
         $db,
         'select id, coalesce(o.name, om.name) as name, coalesce(o.unity, om.unity) as unity , top, "left", level from onewire_meta om left join onewire o using (id)'
@@ -25,6 +69,8 @@
             'level' => $row['level']
         );
     }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -40,10 +86,10 @@
         <link rel="stylesheet" type="text/css" href="/css/tab.css" />
         <link rel="stylesheet" type="text/css" href="/css/popup.css" />
         <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
-        <link rel="stylesheet" type="text/css" href="/css/widget.css" />
-	<link rel="stylesheet" type="text/css" href="/templates/<?=$config["template"]["user"]?>/css/widget.css" />
-
-
+        <link rel="stylesheet" type="text/css" href="/css/widget.css">
+        <style type="text/css">
+            <? echo $css; ?>
+        </style>
         <title>House On Wire</title>
     </head>
     <body>
@@ -54,38 +100,17 @@
             </h1>
             <div class="tabs">
                 <div class="tabsButtons">
-		<?
-			$first = "selected";
-			while (list($key, $val) = each($config["levels"])) 
-			{
-				if($val !== "")
-				{
-				    echo "<div class=\"tab $key $first\" data-tab-name=\"$key\">\n";
-	                       	    echo $val."\n";
-		                    echo "</div>\n";
-				    $first = "";
-				}		
-			}
-			?>
+		    <?
+			echo $tabsbuttons;
+		    ?>
                     <div class="tab logs" data-tab-name="logs">
                         Logs
                     </div>
                 </div>
                 <div class="tabsContainers">
-                <?
-                        reset($config["levels"]);
-			$first = "";
-                        while (list($key, $val) = each($config["levels"])) 
-                        {
-                                if($val !== "")    
-                                {    
-                                    echo "<div class=\"tabBody $key $first\">\n";
-                                    echo "<div id=\"$key\" class=\"widgets\"></div>\n";
-                                    echo "</div>\n";
-				    $first = "hidden";
-                                }
-                        }
-                        ?>
+                    <?
+                        echo $tabscontainers;
+                    ?>
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
                     </div>
