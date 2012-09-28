@@ -41,6 +41,8 @@
         <link rel="stylesheet" type="text/css" href="/css/popup.css" />
         <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
         <link rel="stylesheet" type="text/css" href="/css/widget.css" />
+	<link rel="stylesheet" type="text/css" href="/templates/<?=$config["template"]["user"]?>/css/widget.css" />
+
 
         <title>House On Wire</title>
     </head>
@@ -52,29 +54,38 @@
             </h1>
             <div class="tabs">
                 <div class="tabsButtons">
-                    <div class="tab global selected" data-tab-name="global">
-                        Vue d'ensemble
-                    </div>
-                    <div class="tab level0" data-tab-name="level0">
-                        Rez de chaussée
-                    </div>
-                    <div class="tab level1" data-tab-name="level1">
-                        Etage
-                    </div>
+		<?
+			$first = "selected";
+			while (list($key, $val) = each($config["levels"])) 
+			{
+				if($val !== "")
+				{
+				    echo "<div class=\"tab $key $first\" data-tab-name=\"$key\">\n";
+	                       	    echo $val."\n";
+		                    echo "</div>\n";
+				    $first = "";
+				}		
+			}
+			?>
                     <div class="tab logs" data-tab-name="logs">
                         Logs
                     </div>
                 </div>
                 <div class="tabsContainers">
-                    <div class="tabBody global">
-                        <div id="global" class="widgets"></div>
-                    </div>
-                    <div class="tabBody level0 hidden">
-                        <div id="level0" class="widgets"></div>
-                    </div>
-                    <div class="tabBody level1 hidden">
-                        <div id="level1" class="widgets"></div>
-                    </div>
+                <?
+                        reset($config["levels"]);
+			$first = "";
+                        while (list($key, $val) = each($config["levels"])) 
+                        {
+                                if($val !== "")    
+                                {    
+                                    echo "<div class=\"tabBody $key $first\">\n";
+                                    echo "<div id=\"$key\" class=\"widgets\"></div>\n";
+                                    echo "</div>\n";
+				    $first = "hidden";
+                                }
+                        }
+                        ?>
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
                     </div>
@@ -102,5 +113,6 @@
         <script type="text/javascript" src="/js/log.js"></script>
         <script type="text/javascript" src="/js/dashboard.js"></script>
         <script type="text/javascript" src="/js/widget.js"></script>
+
     </body>
 </html>

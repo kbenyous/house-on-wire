@@ -205,24 +205,6 @@ switch($type)
         case 'papp_full' :
                 echo "Date".$s_separateur."Puissance instantanée".$s_fin_ligne;
 
-                $query = "
-            SELECT
-                date,
-                round(papp) AS papp,
-                                round(papp_min) AS papp_min,
-                                round(papp_max) AS papp_max
-                   FROM teleinfo_histo
-                  WHERE date < ('now'::text::date - '1 day'::interval)
-        UNION ALL
-                 SELECT
-                date,
-                                papp,
-                                papp as papp_min,
-                                papp as papp_max
-              FROM teleinfo
-                  WHERE date >= ('now'::text::date - '1 day'::interval)
-        ORDER BY date";
-
                $query = "
              SELECT
                                 date,
