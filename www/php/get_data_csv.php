@@ -201,6 +201,18 @@ switch($type)
 
         break;
 
+	case 'papp_live' :
+		$return = array();		
+		$return['status'] == 'success';
+		$query = "SELECT date, papp FROM teleinfo ORDER BY date DESC LIMIT 1;";
+		$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+		$row = pg_fetch_array( $result );
+    		$return['content']['date'] = $row["date"];
+		$return['content']['papp'] = $row['papp'];
+	//	header("Content-type: text/json");
+		echo json_encode($return);
+	break;
+
 
         case 'papp_full' :
                 echo "Date".$s_separateur."Puissance instantanée".$s_fin_ligne;

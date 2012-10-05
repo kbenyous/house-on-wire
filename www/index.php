@@ -137,6 +137,11 @@
         <script type="text/javascript" src="/js/log.js"></script>
         <script type="text/javascript" src="/js/dashboard.js"></script>
         <script type="text/javascript" src="/js/widget.js"></script>
+	<script type="text/javascript" src="/js/dygraph-combined.js"></script>
 
+	<? 
+	//echo file_get_contents("php/chart_papp_live.php");
+	include "php/chart_papp_live.php";
+	?>
     </body>
 </html>

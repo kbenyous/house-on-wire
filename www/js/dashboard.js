@@ -24,6 +24,10 @@ new (AbstractClass.extend({
                 '<p id="dashboardTitle">Informations</p>' +
                 '<div id="dashboardBody"></div>' +
                 '<div id="dashboardHr">&nbsp;</div>' +
+		'<div id="dashboardGraph">' +
+			'<div id="papp_live_gauge" style="width:20px; height:100px; border: solid 1px black; display: inline-block;"></div><div id="div_g" style="width:180px; height:100px; border: solid 1px black; display: inline-block;"></div>' +
+		'</div>' +
+		'<div id="dashboardHr">&nbsp;</div>' +
                 '<div id="dashboardToolbar">' +
                     '<img class="popupLink" data-type="graphFull" src="/image/temp.png" ' +
                          'alt="Comparaison des températures" title="Comparaison des températures" />' +
@@ -47,7 +51,7 @@ new (AbstractClass.extend({
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/elect.png" title="Electricité" alt="Electricité" />' +
                         '<div class="dashboardLineTitleName">' +
-                            '<span>' + response[lineName].current.value + '</span>' +
+                            '<span id="pappValue">' + response[lineName].current.value + '</span>' +
                             '<span>&nbsp;</span>' +
                             '<span>' + response[lineName].current.unit + '</span>' +
                         '</div>' +

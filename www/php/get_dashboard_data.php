@@ -17,7 +17,7 @@ $result = pg_query( $db, $query ) or die ("Erreur SQL : ". pg_result_error( $res
 $row = pg_fetch_array($result);
 
 $return['content']['electricity']['current']['value'] = $row['papp'];
-$return['content']['electricity']['current']['unit'] = 'kW/h';
+$return['content']['electricity']['current']['unit'] = 'W';
 $return['content']['electricity']['current']['ptec'] = $row['ptec'];
 
 $query = "select date, trunc(hchc::numeric/1000, 2) as hchc, trunc(hchp::numeric/1000, 2) as hchp, trunc((hchc+hchp)::numeric/1000, 2) as hc, trunc(cout_hc+cout_hp+cout_abo, 2) as cout from teleinfo_cout where date = current_date - interval '1 day'";
