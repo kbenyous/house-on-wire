@@ -1,4 +1,5 @@
 <?php
+
     // Lecture du fichier de conf
     $config = parse_ini_file('/etc/house-on-wire/house-on-wire.ini', true);
     $db = pg_connect(
