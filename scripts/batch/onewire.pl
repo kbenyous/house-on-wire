@@ -64,27 +64,57 @@ my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$log
 foreach (@sondes) {
   my $sonde=$_;
   my $sonde_type = `cat $owfs_path/$sonde/type`;
+  chomp($sonde_type);  
   
-  if(exists($SIMPLES_DEVICES{$sonde_type}))
+  # On met en place un traitement spécial pour la 2438 qui est utilisé pour l'humidité, la luminosité, etc
+  if($sonde_type eq "DS2438")
   {
-     $sonde_data = `cat $owfs_path/$sonde/$SIMPLES_DEVICES{$sonde_type}`;
+    # Lecture de la température presente dans le DS2438
+    $sonde_data = `cat $owfs_path/$sonde/temperature`;
+    chomp($sonde_data);
+    sauvegarder_ligne($dbi, $datetime, $sonde.".t", $sonde_type, $sonde_data );
+
+    #Traitement des data en fonction de l'utilisation de la sonde
+    my $prep = $dbi->prepare('SELECT type FROM onewire WHERE id = \''.$sonde.'.v\'') or die $dbi->errstr; 
+    $prep->execute() or die "Echec requête\n"; 
+    while ( my ($type) = $prep->fetchrow_array ) 
+    { 
+      if($type eq "Luminosité")
+      {
+        my $vdd = `cat $owfs_path/$sonde/VDD`;
+        my $vad = `cat $owfs_path/$sonde/VAD`;
+        $sonde_data = $vad * 100 / $vdd;
+        chomp($sonde_data);
+        sauvegarder_ligne($dbi, $datetime, $sonde.".v", $sonde_type, $sonde_data );
+      }
+      elsif($type eq "Humidité")
+      {
+        $sonde_data =  `cat $owfs_path/$sonde/VAD` * 33.33;
+        chomp($sonde_data);
+        sauvegarder_ligne($dbi, $datetime, $sonde.".v", $sonde_type, $sonde_data );
+      }
+    } 
+    $prep->finish(); 
   }
   else
   {
-#    if($sonde eq "26.2FAE60010000")
-    if($sonde eq "26.24AE60010000")
+    if(exists($SIMPLES_DEVICES{$sonde_type}))
     {
-      my $vdd = `cat $owfs_path/$sonde/VDD`;
-      my $vad = `cat $owfs_path/$sonde/VAD`;
-      $sonde_data = $vad * 100 / $vdd;
+       $sonde_data = `cat $owfs_path/$sonde/$SIMPLES_DEVICES{$sonde_type}`;
+       chomp($sonde_data);
+       sauvegarder_ligne($dbi, $datetime, $sonde, $sonde_type, $sonde_data );
     }
-
   }
- 
-  chomp($sonde_type);
-  chomp($sonde_data);
-  #print "$datetime $sonde $sonde_type $sonde_data \n";
-
-  $dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$sonde', '$sonde_data')");
 }
 $dbi->disconnect;
+
+# Procédure pour sauvegarder en base de donnees
+sub sauvegarder_ligne { 
+  my ( $dbi, $datetime, $sonde, $sonde_type, $sonde_data ) = @_; 
+ 
+#  print "$datetime $sonde $sonde_type $sonde_data \n";
+
+  $dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$sonde', '$sonde_data')");
+
+  return; 
+} 

@@ -103,7 +103,10 @@
 		    <?
 			echo $tabsbuttons;
 		    ?>
-                    <div class="tab logs" data-tab-name="logs">
+                    <div class="tab stats" data-tab-name="stats">
+                        Statistiques
+                    </div>
+                   <div class="tab logs" data-tab-name="logs">
                         Logs
                     </div>
                 </div>
@@ -111,6 +114,15 @@
                     <?
                         echo $tabscontainers;
                     ?>
+                    <div class="tabBody stats hidden">
+                        <div id="statistiques">
+                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                                    height="630px" src="php/statistiques.php">
+                            </iframe>
+
+			</div>
+                    </div>
+
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
                     </div>

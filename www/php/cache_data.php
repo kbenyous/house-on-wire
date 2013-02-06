@@ -1,113 +1,39 @@
 <?php
 
-
-if(!ob_start("ob_gzhandler")) ob_start();
-
-/*
-    Fichier de génération des données au format CSV
-
-    Evite l'insertion des données directement dans le code source JS de la page.
-
-    Referencement des Graph :
-        - Historique des températures / luminosité
-            - Graph Last days ( Grouper par heure sur 10 jours ) type=last_days&sonde=id
-            - Graph Historique histo ( Grouper par jour sur l'historique complet ) type=full&sonde=id
-        - Comparaison des températures
-            - Graph Histo ( Groupé par jour et par courbe sur l'historique complet ) type=temp_full
-        - Comsommation electrique
-            - Graph Historique ( Groupé par minutes sur l'historique complet ? ) type=papp_full
-
-    Paramètres attendus en entrée :
-        - $_GET['type'] =
-        - $_GET['sonde'] = id_sonde ou null
-*/
-
-// choix du séparateur
-$s_separateur=',';
-// choix du fin de ligne
-$s_fin_ligne="\r\n";
 // Connection à la base de données
 // Lecture du fichier de conf
 $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
 $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port']." dbname=".$config['bdd']['dbname']." user=".$config['bdd']['username']." password=".$config['bdd']['password']." options='--client_encoding=UTF8'") or die("Erreur de connexion au serveur SQL");
 
-if(isset($_GET['type']) && $_GET['type'] != '')
-{
-        $type = $_GET['type'];
-}
-else
-{
-    echo "Absence du type";
-    exit;
-}
-if(isset($_GET['sonde']) && $_GET['sonde'] != '')
-{
-        $sonde = $_GET['sonde'];
-}
-else
-{
-    $sonde = '';
-}
-if(isset($_GET['cache']) && $_GET['cache'] == 'true')
-{
-	$use_cache = false;
-        $cond_date = " AND date < current_date ";
-}
-else
-{
-	if(file_exists("./../cache/".$type."_".$sonde.".csv"))
-	{
-        	$use_cache = true;
-	        $date_cond = " AND date_trunc('day', date) = current_date ";
-	}
-	else
-	{
-		$use_cache = false;
-	        $date_cond = '';
-	}
-}
 
-//header('Content-type: text/csv');
-//header('Content-disposition: attachment;filename=data.csv');
+// Lecture de la liste des sondes à générer
+//$query = "select id, type from onewire union select distinct regroupement, type from onewire_meta join onewire using (id) where regroupement is not null";
+$query = "select id from onewire union select id from onewire_meta";
+echo "Debut programme de mise en cache".'\n';
 
-if($sonde != '')
-{
-
-// On a passé un ID ou un regroupement d'id ?
-$query = "SELECT
-                *
-        FROM
-                onewire
-        WHERE
-                id = ANY ( case
-                        when exists(select 1 from onewire where id = '".$sonde."')
-                        then (select array_agg(id) from onewire where id = '".$sonde."')
-                        else (select array_agg(id) from onewire_meta where regroupement = '".$sonde."' )
-                end )";
 
 $liste_id = array();
 $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
 while ($row = pg_fetch_array($result))
 {
-        array_push($liste_id, "'".$row['id']."'");
-    // On garde en memoire les infos de la derniere sonde lue ( on d'en fout c'est juste pour le type )
-    $info_sonde = $row;
+echo "mise en cache de la sonde ".$row['id'].'\n';
+	file_put_contents(realpath (dirname(__FILE__))."./../cache/last_days_".$row['id'].".csv", file_get_contents("http://house.vitre.info/php/get_data_csv.php?cache=true&type=last_days&sonde=".$row['id']));
+	file_put_contents(realpath (dirname(__FILE__))."./../cache/full_".$row['id'].".csv", file_get_contents("http://house.vitre.info/php/get_data_csv.php?cache=true&type=full&sonde=".$row['id']));
+
 }
 
+echo "mise en cache de papp_full".'\n';
+// http://house.vitre.info/php/get_data_csv.php?type=papp_full
+        file_put_contents(realpath (dirname(__FILE__))."./../cache/papp_full_".$row['id'].".csv", file_get_contents("http://house.vitre.info/php/get_data_csv.php?cache=true&type=papp_full"));
 
-
+echo "Fin de la mise en cache".'\n';
+/*
 }
 switch($type)
 {
     case 'last_days' :
-	if($use_cache)
-	{
-        	echo file_get_contents("./../cache/".$type."_".$sonde.".csv");
-	}
-	else
-	{
-		echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
-	}
+        echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
+
         $query = "
         SELECT
             date_trunc('hour', date) as date,
@@ -118,7 +44,6 @@ switch($type)
         WHERE
             id IN (".implode(',',$liste_id).") and
             value != ''
-	    ".$date_cond."
         GROUP BY
             date_trunc('hour', date)
         ORDER BY
@@ -134,14 +59,7 @@ switch($type)
         break;
 
     case 'full' :
-        if($use_cache)
-        {
-                echo file_get_contents("./../cache/".$type."_".$sonde.".csv");
-        }
-        else
-        {
-	        echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
-	}
+                echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
 
         $query = "
         SELECT
@@ -154,7 +72,6 @@ switch($type)
         where
             id IN (".implode(',',$liste_id).") and
             value != ''
-		".$date_cond." 
         group by
             date_trunc('day', date)
         order by
@@ -250,22 +167,14 @@ switch($type)
 
 
         case 'papp_full' :
-        if($use_cache)
-        {
-                echo file_get_contents("./../cache/".$type."_".$sonde.".csv");
-        }
-        else
-        {
-
                 echo "Date".$s_separateur."Puissance instantanée".$s_fin_ligne;
-	}
+
                $query = "
              SELECT
                                 date,
                                 papp
                           FROM teleinfo
                           WHERE date >= ('now'::text::date - '2 days'::interval)
-		".$date_cond."
                 ORDER BY date";
 
                $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
@@ -303,33 +212,8 @@ switch($type)
 		echo date('Y-m-d 00:00:00').$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_fin_ligne;
               break;
 
-        case 'conso_elect_euro' :
-                echo "Date".$s_separateur."Heures Pleines".$s_separateur."Heures Creuses".$s_separateur."Abonnement".$s_fin_ligne;
-
-               $query = "
-                     SELECT
-                                date,
-				trunc(cout_abo, 2) AS abo,
-                                trunc(cout_hp, 2) AS hp,
-                                trunc(cout_hc, 2) AS hc
-                          FROM teleinfo_cout
-                        ORDER BY date";
-
-               $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
-
-                while ($row = pg_fetch_array($result))
-                {
-                        echo $row['date'].$s_separateur.$row['hp'].$s_separateur.$row['hc'].$s_separateur.$row['abo'].$s_fin_ligne;
-
-                }
-
-                // Insertion d'une fausse ligne pour la journée en court pour afficher la barre sur le graph
-                $row = pg_fetch_array($result, pg_num_rows($result)-1);
-                echo date('Y-m-d 00:00:00').$s_separateur.$row['hp'].$s_separateur.$row['hc'].$s_separateur.$row['abo'].$s_fin_ligne;
-              break;
-
 }
 
-
+*/
 ?>
 

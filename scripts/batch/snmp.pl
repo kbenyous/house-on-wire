@@ -59,8 +59,10 @@ while (@data = $sth->fetchrow_array())
   my $snmp_data = `$snmp_command`;
   chomp($snmp_data);
   print "\t$datetime $snmp_id: $snmp_command $snmp_data\n";
-  $dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$snmp_id', '$snmp_data')");
-
+  if($snmp_data ne '')
+  {
+    $dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$snmp_id', '$snmp_data')");
+  }
 
 }
 #if ($sth->rows == 0) { print "No names matched `$lastname'.\n\n";}

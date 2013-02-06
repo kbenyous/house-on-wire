@@ -5,7 +5,7 @@ $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port'].
 
 $return['status'] = 'success';
 
-$query = "select case when last_update > current_timestamp - interval '20 minutes' then trunc(last_value::numeric, 2) else 0 end as luminosite from onewire where id = '26.24AE60010000'";
+$query = "select case when last_update > current_timestamp - interval '20 minutes' then trunc(last_value::numeric, 2) else 0 end as luminosite from onewire where id = '26.24AE60010000.v'";
 $result = pg_query( $db, $query ) or die ("Erreur SQL : ". pg_result_error( $result ) );
 $row = pg_fetch_array($result);
 

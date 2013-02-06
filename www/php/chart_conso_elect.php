@@ -5,7 +5,9 @@
         <script type="text/javascript" src="/js/dygraph-combined.js"></script>
     </head>
     <body>
-        <div id="graphdiv" style="width:1150px; height:550px;"></div>
+        <div id="graphdiv" style="width:1150px; height:300px;"></div>
+        <div id="graphdiv2" style="width:1150px; height:300px;"></div>
+
         <?php
             // Lecture du fichier de conf
             $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
@@ -32,6 +34,24 @@
                     dateWindow:[<?=$date['start_date'] ?>, <?=$date['finish_date'] ?>]
                 }
             );
+
+            new Dygraph(
+                // containing div
+                document.getElementById('graphdiv2'),
+                '/php/get_data_csv.php?type=conso_elect_euro',
+                {
+                    title: 'Consommation Electrique',
+                    ylabel: '€',
+                    legend: 'always',
+                    labelsDivStyles: { 'textAlign': 'right' },
+                    showRangeSelector: true,
+                    stepPlot: true,
+                    fillGraph: true,
+                    stackedGraph: true,
+                    dateWindow:[<?=$date['start_date'] ?>, <?=$date['finish_date'] ?>]
+                }
+            );
+
         </script>
     </body>
 </html>

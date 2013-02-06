@@ -25,7 +25,7 @@ new (AbstractClass.extend({
                 '<div id="dashboardBody"></div>' +
                 '<div id="dashboardHr">&nbsp;</div>' +
 		'<div id="dashboardGraph">' +
-			'<div id="papp_live_gauge" style="width:20px; height:100px; border: solid 1px black; display: inline-block;"></div><div id="div_g" style="width:180px; height:100px; border: solid 1px black; display: inline-block;"></div>' +
+			'<!--div id="papp_live_gauge" style="width:20px; height:100px; border: solid 1px black; display: inline-block;"></div--><div id="div_g" style="width:200px; height:100px; border: solid 1px black; display: inline-block;"></div>' +
 		'</div>' +
 		'<div id="dashboardHr">&nbsp;</div>' +
                 '<div id="dashboardToolbar">' +
@@ -101,7 +101,7 @@ new (AbstractClass.extend({
 */  
                case 'luminosity': {
                     var widgetParameters = {
-                        'id' : '26.24AE60010000'
+                        'id' : '26.24AE60010000.v'
                     }
                     dashboardBodyContent += '<div class="dashboardLine">' +
                         '<img class="dashboardLineTitleImg" src="/image/contraste.png" title="Luminosité" alt="Luminosité" />' +

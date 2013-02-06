@@ -69,6 +69,11 @@ while(1) {
 			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
             		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
 			$dbi->disconnect;
+			
+			$my_file="/tmp/papp";
+			open(PLOT,">$my_file") || die("The file cannot be opened!");
+			print PLOT "$9";
+			close(PLOT);
 		}
 		else
 		{

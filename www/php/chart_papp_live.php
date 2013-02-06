@@ -35,7 +35,7 @@ $result = pg_query( $db, "SELECT date, papp from teleinfo where date > current_t
                     stepPlot: true,
                     fillGraph: true,
                     stackedGraph: true,
-//                  valueRange: [0, <?=$papp['papp_max']?>],
+                  valueRange: [0, <?=$papp['papp_max']?>],
 //		    includeZero: true,
 		    drawXGrid: false,
 		    drawYGrid: false,
@@ -43,7 +43,7 @@ $result = pg_query( $db, "SELECT date, papp from teleinfo where date > current_t
 		    rightGap: false,
 		    drawYAxis: false
                 });
-
+/*
       var g2 = new Dygraph(
                 document.getElementById("papp_live_gauge"), 
                 data,
@@ -59,7 +59,7 @@ $result = pg_query( $db, "SELECT date, papp from teleinfo where date > current_t
                     rightGap: false,
                     drawYAxis: false
                 });
-
+*/
       setInterval(function() {
 
     $.ajax({
@@ -70,7 +70,7 @@ $result = pg_query( $db, "SELECT date, papp from teleinfo where date > current_t
 		data.shift();
 		data.push([new Date(parsedResponse.content.date), parsedResponse.content.papp]);
 		g.updateOptions( { 'file': data } );
-                g2.updateOptions( { 'file': data } );
+//                g2.updateOptions( { 'file': data } );
 		$('#pappValue').html(parsedResponse.content.papp);
 }
       });

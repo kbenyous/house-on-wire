@@ -1,0 +1,31 @@
+/*
+.hidden {
+    display: none;
+}
+*/
+
+#stats {
+/*    background-color: red;*/
+}
+
+#stats .entete {
+    text-align: center !important;
+    font: bold;
+}
+
+#stats .min {
+    background-color: #CCFFFF;
+    text-align: right;
+}
+
+#stats .moy {
+/*    background-color: yellow;*/
+    text-align: right;
+}
+
+
+#stats .max {
+    background-color: #FFCCCC;
+    text-align: right;
+}
+
