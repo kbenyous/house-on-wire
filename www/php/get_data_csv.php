@@ -179,7 +179,7 @@ switch($type)
                         FROM
                                 onewire
                         WHERE
-                                type = 'Température'
+                                type = 'temperature'
                         ORDER BY
                                 id";
         $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
@@ -203,7 +203,7 @@ switch($type)
             JOIN onewire USING (id)
             WHERE
                 value != '''' AND
-                type = ''Température''
+                type = ''temperature''
             GROUP BY
                 id,
                 date_trunc(''day'', date)
@@ -215,7 +215,7 @@ switch($type)
             FROM
                 onewire
             WHERE
-                type = ''Température''
+                type = ''temperature''
             ORDER BY
                 1'
         )
@@ -302,6 +302,30 @@ switch($type)
 		$row = pg_fetch_array($result, pg_num_rows($result)-1);		
 		echo date('Y-m-d 00:00:00').$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_fin_ligne;
               break;
+
+
+        case 'conso_elect_full' :
+                echo "Date".$s_separateur."Heures Pleines".$s_separateur."Heures Creuses".$s_separateur."Total".$s_fin_ligne;
+
+               $query = "
+                     SELECT
+                                date::date as date,
+                                hchp,
+                                hchc,
+                                hchp+hchc as hpc
+                          FROM teleinfo_cout
+                        ORDER BY date";
+
+               $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+
+                while ($row = pg_fetch_array($result))
+                {
+                        echo $row['date'].$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_separateur.$row["hpc"].$s_fin_ligne;
+
+                }
+
+              break;
+
 
         case 'conso_elect_euro' :
                 echo "Date".$s_separateur."Heures Pleines".$s_separateur."Heures Creuses".$s_separateur."Abonnement".$s_fin_ligne;
