@@ -43,9 +43,19 @@ while ($row = pg_fetch_array($result))
                     EDF
                     <span class="ui-li-count">
 <?php
-$result = pg_query( $db, " select round(avg(papp),0) as puiss from teleinfo where date >= (current_timestamp - interval '5min'); " ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
+$result = pg_query( $db, " select * from (select extract(EPOCH FROM date) as ts, (hchp+hchc) as conso  from teleinfo where date >= (current_timestamp - interval '5min') order by date asc) a limit 1; " ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
 $row=pg_fetch_array($result);
-echo $row["puiss"];
+$ts_prec = $row["ts"];
+$conso_prec = $row["conso"];
+
+$result = pg_query( $db, " select extract(EPOCH FROM date) as ts, (hchp+hchc) as conso  from teleinfo order by date desc limit 1; " ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
+$row=pg_fetch_array($result);
+$ts_now = $row["ts"];
+$conso_now = $row["conso"];
+
+echo round( 3600 * ($conso_now-$conso_prec)/($ts_now-$ts_prec) );
+
+
 ?> W
                     </span>
             </li>
