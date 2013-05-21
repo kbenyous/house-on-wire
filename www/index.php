@@ -56,7 +56,7 @@
     // Récupération des sondes
     $result = pg_query(
         $db,
-        'select id, coalesce(o.name, om.name) as name, coalesce(o.unity, om.unity) as unity , top, "left", level from onewire_meta om left join onewire o using (id)'
+	'select id, coalesce(o.name, om.name) as name, coalesce(o.unity, om.unity) as unity , top, "left", level, coalesce(o.type, om.type) as type from onewire_meta om left join onewire o using (id)'
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 
     $widgetsData = array();
@@ -67,7 +67,8 @@
             'unit' => $row['unity'],
             'top' => $row['top'],
             'left' => $row['left'],
-            'level' => $row['level']
+            'level' => $row['level'],
+	    'type' => $row['type']
         );
     }
 
@@ -110,6 +111,7 @@
                    <div class="tab logs" data-tab-name="logs">
                         Logs
                     </div>
+
                 </div>
                 <div class="tabsContainers">
                     <?
@@ -127,6 +129,7 @@
                     <div class="tabBody logs hidden">
                         <div id="logConsole"></div>
                     </div>
+
                 </div>
             </div>
         </div>

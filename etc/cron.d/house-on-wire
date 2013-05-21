@@ -1,7 +1,17 @@
-
+# Crontab relative à l'application House-on-wire
 
 # Historisation des informations te teleinfo
 0 3 * * *  root  psql -U supervision homedata -c "select historisation_teleinfo()" >/var/log/house-on-wire/teleinfo_histo.log 2>&1
 
+# Lectures périodique des capteurs
+*/5 * * * * root perl /opt/house-on-wire/scripts/batch/onewire.pl > /var/log/house-on-wire/onewire.log 2>&1
+*/5 * * * * root perl /opt/house-on-wire/scripts/batch/snmp.pl > /var/log/house-on-wire/snmp.log 2>&1
 
-*/5 * * * * root perl /mnt/data/scripts/onewire.pl > /var/log/house-on-wire/onewire.log 2>&1
+# Mise en cache des données de graphs
+5 0 * * * root  php /opt/house-on-wire/www/php/cache_data.php > /var/log/house-on-wire/cache_data.log 2>&1
+
+# Création des tables partitionnée
+0 1 * * * root psql -U postgres -d homedata -c "SELECT partition.create_next()" > /var/log/house-on-wire/partitionnement.log 2>&1
+
+# Création des statistiques sur les capteurs
+0 2 * * * root psql -U postgres -d homedata -c "SELECT * from  generate_statistiques('`date --date '1 days ago' "+\%Y-\%m-\%d"`'); "  > /var/log/house-on-wire/statistiques.log 2>&1

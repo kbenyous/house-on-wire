@@ -12,7 +12,7 @@ var widgetClass = AbstractClass.extend({
             'maj' : {
                 'value' : 0
             },
-            'temperature' : {
+            'last_value' : {
                 'value' : 0
             },
             'deltaPlusOneHour' : {
@@ -50,7 +50,7 @@ var widgetClass = AbstractClass.extend({
                  'class="widget">' +
                 '<span class="widgetTitle">' + this._widgetData.title + '</span>' +
                 '<span> : </span>' +
-                '<span class="widgetTemperatureValue"></span>' +
+                '<span class="widgetValue"></span>' +
                 '<span>&nbsp;</span>' +
                 '<span>' + this._widgetData.unit + '</span>' +
                 '<div class="tooltipAnchor">' +
@@ -63,8 +63,8 @@ var widgetClass = AbstractClass.extend({
                         '<div class="widgetContent">' +
                             '<div class="widgetTemperature">' +
                                 '<p class="widgetTemperatureThermometer blue">&nbsp;</p>' +
-                                '<p class="widgetTemperatureValue">&nbsp;</p>' +
-                                '<p class="widgetTemperatureUnit">' + this._widgetData.unit + '</p>' +
+                                '<p class="widgetValue">&nbsp;</p>' +
+                                '<p class="widgetUnit">' + this._widgetData.unit + '</p>' +
                             '</div>' +
                             '<div class="widgetDelta">' +
                                 '<p class="widgetDeltaTitle">Moyenne :</p>' +
@@ -114,13 +114,16 @@ var widgetClass = AbstractClass.extend({
             $(widget).find('.widgetUpdate').html('(' + response.maj.value + ')');
 
             // Temperature
-            $(widget).find('.widgetTemperatureValue').html((parseFloat(response.temperature.value || 0)));
-            var thermometerColor = 'blue';
-            if (response.temperature.value >= 22) {
+            $(widget).find('.widgetValue').html((parseFloat(response.last_value.value || 0)));
+
+// Coloration du thermo
+// On vire pour le moment
+//            var thermometerColor = 'blue';
+//            if (response.temperature.value >= 22) {
                 thermometerColor = 'red';
-            } else if (response.temperature.value >= 18) {
-                thermometerColor = 'green';
-            }
+//            } else if (response.temperature.value >= 18) {
+//                thermometerColor = 'green';
+//            }
             $(widget).find('.widgetTemperatureThermometer').removeClass('blue').removeClass('green').removeClass('red').addClass(thermometerColor);
             $(widget).find('.widgetDeltaImage').removeClass('increase').removeClass('decrease');
 

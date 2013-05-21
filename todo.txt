@@ -14,6 +14,16 @@
 
 - Rennomer les tables snmp créées ci dessus pour une utilisation plus générique
 - Mise en cache des fichiers csv pour gagner en temps d'affichage sur les graphs + remplissage avec des datas de la journée
+
+- Données à cacher
+	Pour chaque sonde 
+		http://house.vitre.info/php/get_data_csv.php?type=last_days&sonde=28.DEE652030000
+		http://house.vitre.info/php/get_data_csv.php?type=full&sonde=28.DEE652030000
+
+		http://house.vitre.info/php/get_data_csv.php?type=papp_full
+
+
+
 - Mise à jour en live des sondes de température avec lecture dans owfs
 
 - Page public / privée, authentification ... ensemble à définir

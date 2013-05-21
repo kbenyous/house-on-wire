@@ -18,7 +18,7 @@
 $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
 $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port']." dbname=".$config['bdd']['dbname']." user=".$config['bdd']['username']." password=".$config['bdd']['password']." options='--client_encoding=UTF8'") or die("Erreur de connexion au serveur SQL");
 
-$result = pg_query( $db, "SELECT * from onewire where type ='Température' order by id" ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
+$result = pg_query( $db, "SELECT * from onewire where type ='temperature' order by id" ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
 $i = 0;
 
 $labels = array();

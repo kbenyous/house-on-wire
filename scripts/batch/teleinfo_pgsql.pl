@@ -66,8 +66,9 @@ while(1) {
 		if ($line =~ /ADCO (\d{12});OPTARIF (....);ISOUSC (\d{2});HCHC (\d{9});HCHP (\d{9});PTEC (..)..;IINST (\d{3});IMAX (\d{3});PAPP (\d{5});HHPHC (.);MOTDETAT (\d{6});$/)
 		{
 			print "Format ligne OK : $line $datetime\n";
+
 			my $dbi=DBI->connect("DBI:Pg:dbname=$database;host=$hostname;port=$dbport","$login","$password") or die "Erreur pendant l'ouverture de la base de Donnée PG $DBI::errstr";
-            		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, '$datetime')");
+            		$dbi->do("insert into teleinfo (isousc,hchc,hchp,ptec,iinst,imax,papp,date) values ($3,$4,$5,'$6'::varchar(2),$7,$8,$9, now())");
 			$dbi->disconnect;
 			
 			$my_file="/tmp/papp";

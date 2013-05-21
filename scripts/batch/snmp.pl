@@ -61,7 +61,7 @@ while (@data = $sth->fetchrow_array())
   print "\t$datetime $snmp_id: $snmp_command $snmp_data\n";
   if($snmp_data ne '')
   {
-    $dbi->do("insert into onewire_data (date, id, value) values ('$datetime', '$snmp_id', '$snmp_data')");
+    $dbi->do("insert into onewire_data (date, id, value) values (now(), '$snmp_id', '$snmp_data')");
   }
 
 }

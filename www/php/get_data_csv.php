@@ -133,6 +133,37 @@ switch($type)
 
         break;
 
+    case 'day_temp' :
+        echo "Date".$s_separateur."min".$s_separateur."moy".$s_separateur."max".$s_separateur."delta".$s_fin_ligne;
+
+        $query = "
+        SELECT
+            date_trunc('day', date)::date as date,
+            round(avg(value::numeric), 2) as value,
+            round(min(value::numeric), 2) as min_value,
+            round(max(value::numeric), 2) as max_value,
+	    round(max(value::numeric)-min(value::numeric), 2) as delta_value
+        FROM
+            onewire_data
+        where
+            id IN (".implode(',',$liste_id).") and
+            value != ''
+                ".$date_cond." 
+        group by
+            date_trunc('day', date)
+        order by
+            date ASC;";
+
+               $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+
+                while ($row = pg_fetch_array($result))
+                {
+                        echo $row['date'].$s_separateur.$row['min_value'].$s_separateur.$row['value'].$s_separateur.$row['max_value'].$s_separateur.$row['delta_value'].$s_fin_ligne;
+                }
+
+        break;
+
+
     case 'full' :
         if($use_cache)
         {
@@ -140,7 +171,7 @@ switch($type)
         }
         else
         {
-	        echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
+		echo "Date".$s_separateur.$info_sonde['type'].$s_fin_ligne;
 	}
 
         $query = "
@@ -310,9 +341,9 @@ switch($type)
                $query = "
                      SELECT
                                 date::date as date,
-                                hchp,
-                                hchc,
-                                hchp+hchc as hpc
+                                trunc(hchp::numeric/1000, 2) AS hchp,
+                                trunc(hchc::numeric/1000, 2) AS hchc,
+				trunc((hchc::numeric+hchp::numeric)/1000, 2) AS hpc
                           FROM teleinfo_cout
                         ORDER BY date";
 

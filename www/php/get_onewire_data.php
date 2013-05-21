@@ -55,29 +55,12 @@ from
 
     ) a;";
 
-/*
-$query2 = "
-SELECT
-    (select avg(value::numeric) from onewire_data where id =  and date > current_timestamp - interval '20 minutes' order by date desc limit 1) as current,
-select
-    id
-from
-    onewire
-where
-    id = ANY ( case
-            when exists(select 1 from onewire where id = '"$_POST['id']"')
-            then (select array_agg(id) from onewire where id = '"$_POST['id']"')
-            else (select array_agg(id) from onewire_meta where regroupement = '"$_POST['id']"' )
-        end )
-
-";
-*/
 $result = pg_query( $db, $query ) or die ("Erreur SQL : ". pg_result_error( $result ) );
 
 $row = pg_fetch_array($result);
 
 $return['content']['maj']['value'] = $row['maj'];
-$return['content']['temperature']['value'] = $row['current'];
+$return['content']['last_value']['value'] = $row['current'];
 $return['content']['deltaPlusOneHour']['direction'] = $row['last_hour_variation'];
 $return['content']['deltaPlusOneHour']['value'] = $row['last_hour'];
 $return['content']['deltaPlusOneDay']['direction'] = $row['last_day_variation'];
