@@ -2,8 +2,9 @@
 import time
 import serial
 #import subprocess 
-#from time import sleep
+from time import sleep
 import datetime
+import sys
 
 def checksum (etiquette, valeur):
                 sum = 32
@@ -21,27 +22,25 @@ def LireTeleinfo ():
 
                 message = ""
                 fin = False
+		while not fin:
+                       char = ser.read(1)
+                       if char != chr(3):
+                               message = message + char
+                       else:
+                               fin = True
+               	trames = [
+                       	trame.split(" ")
+                	for trame in message.strip("\r\n\x03").split("\r\n")
+                       ]
+		
+               	tramesValides = dict([
+                       [trame[0],trame[1]]
+                       for trame in trames
+                       if ( (len(trame) == 3) and (checksum(trame[0],trame[1]) == trame[2])
+                          or(len(trame) == 4) and (checksum(trame[0],trame[1]) == ' ') )
+                       ])
+               	return tramesValides
                 
-                while not fin:
-                        char = ser.read(1)
-                        if char != chr(3):
-                                message = message + char
-                        else:
-                                fin = True
-                
-                trames = [
-                        trame.split(" ")
-                        for trame in message.strip("\r\n\x03").split("\r\n")
-                        ]
-                        
-                tramesValides = dict([
-                        [trame[0],trame[1]]
-                        for trame in trames
-			if ( (len(trame) == 3) and (checksum(trame[0],trame[1]) == trame[2])
-                           or(len(trame) == 4) and (checksum(trame[0],trame[1]) == ' ') )
-                        ])
-                        
-                return tramesValides
 
 #=========================================================================
 # Connexion au port
@@ -57,19 +56,48 @@ ser = serial.Serial(
 # Traitement Premiere voie RPIDOM
 #=========================================================================
 ser.write('A')
-#sleep(1)
-ser.flushInput()
-data = LireTeleinfo()
+sleep(1)
+var = 1
+vNbRetry = 0
+vlogdir ="/var/log/teleinfo/"
+vPreviousSave=""
+vPreviousPAPP=""
+vPreviousPTEC=""
+while True:
+	ser.flushInput()
+	data = LireTeleinfo()
 
 #=========================================================================
 # Definition des des variables temporelles
 #=========================================================================
-vHEURE = datetime.datetime.now().strftime('%H:%M')
-vDATE = datetime.datetime.today().strftime('%Y-%m-%d')
+	vHEURE = datetime.datetime.now().strftime('%H:%M:%S')
+	vDATE = datetime.datetime.today().strftime('%Y-%m-%d')
+	vCURRENTHOUR = datetime.datetime.now().strftime('%H')
 #=========================================================================
-#print ( "ISOUSC = "+ data["ISOUSC"],"HCHC ="+ data["HCHC"],"HCHP= " +  data["HCHP"], "PTEC = "+data["PTEC"][0:2],"IINST= " + data["IINST"], "IMAX= " + data["IMAX"], "PAPP="+ data["PAPP"], vDATE, vHEURE)
+	#print ( "HCHC ="+ data["HCHC"],"HCHP= " +  data["HCHP"], "PTEC = "+data["PTEC"][0:2],"IINST= " +  "PAPP="+ data["PAPP"], vDATE, vHEURE)
 
-with open(vDATE+".csv", "a") as myfile:
-  myfile.write(vDATE +" "+ vHEURE+","+ data["ISOUSC"] +","+ data["HCHC"]+","+ data["HCHP"]+"," +data["PTEC"][0:2]+","+data["IINST"]+","+ data["IMAX"]+","+ data["PAPP"] )
+	try:
+		if (vPreviousSave!=vCURRENTHOUR) :
+			with open(vlogdir+"HCHC-HCHP-"+vDATE+".csv", "a") as hchpfile:	
+				hchpfile.write("'"+vDATE +" "+ vHEURE+"';"+ data["HCHC"]+";"+ data["HCHP"]+"\r\n")
+			vPreviousSave = vCURRENTHOUR
+			hchpfile.close()
+		if(vPreviousPAPP != data["PAPP"] or vPreviousPTEC != data["PTEC"][0:2]) :
+			vPreviousPAPP = data["PAPP"]
+			vPreviousPTEC = data["PTEC"][0:2]
+			with open(vlogdir+"PAPP-"+vDATE+".csv", "a") as myfile:
+	 			myfile.write("'"+vDATE +" "+ vHEURE+"';" +data["PTEC"][0:2]+";"+ data["PAPP"] + "\r\n")
+			myfile.close()
+		vNbRetry = 0
+	except : 
+		#print ("On attend 3 s avant de recommencer")
+		sleep (3)
+		vNbRetry += 1
+		if (vNbRetry < 10) :
+			pass
+		else : 
+			with open(vlogdir+"error.log", "a") as errorfile:
+				errorfile.write(vDATE+" " + vHEURE + ": Y a un prob on arrete la : "+ str(sys.exc_info()[0]) +"\r\n")
+			sys.exit()	
 
 ser.close()
