@@ -79,14 +79,14 @@ while True:
 	try:
 		if (vPreviousSave!=vCURRENTHOUR) :
 			with open(vlogdir+"HCHC-HCHP-"+vDATE+".csv", "a") as hchpfile:	
-				hchpfile.write("'"+vDATE +" "+ vHEURE+"';"+ data["HCHC"]+";"+ data["HCHP"]+"\r\n")
+				hchpfile.write(vDATE +" "+ vHEURE+","+ data["HCHC"]+","+ data["HCHP"]+"\n")
 			vPreviousSave = vCURRENTHOUR
 			hchpfile.close()
 		if(vPreviousPAPP != data["PAPP"] or vPreviousPTEC != data["PTEC"][0:2]) :
 			vPreviousPAPP = data["PAPP"]
 			vPreviousPTEC = data["PTEC"][0:2]
 			with open(vlogdir+"PAPP-"+vDATE+".csv", "a") as myfile:
-	 			myfile.write("'"+vDATE +" "+ vHEURE+"';" +data["PTEC"][0:2]+";"+ data["PAPP"] + "\r\n")
+	 			myfile.write(vDATE +" "+ vHEURE+"," +data["PAPP"]+","+ data["PTEC"][0:2] + "\n")
 			myfile.close()
 		vNbRetry = 0
 	except : 
