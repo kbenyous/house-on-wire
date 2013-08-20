@@ -94,6 +94,10 @@ while ($row = pg_fetch_array($result))
     $info_sonde = $row;
 }
 
+if($sonde == 'all')
+{
+ $liste_id = array('10.22E465020800', '10.28BD65020800', '10.380166020800', '10.A8EB65020800', '10.D6F865020800', '10.EDFA65020800', '28.BB1A53030000');
+}
 
 
 }
@@ -205,48 +209,38 @@ switch($type)
         $liste_champ_type = array();
         $liste_champ = array();
         $query = "
-            SELECT
-                                name
-                        FROM
-                                onewire
-                        WHERE
-                                type = 'temperature'
-                        ORDER BY
-                                id";
+		select distinct(id), coalesce(om.name, o.name) as name from onewire_meta om left join onewire o using (id)  where statistique = true order by id;";
         $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
                 while ($row = pg_fetch_array($result))
                 {
-                        array_push($liste_champ_type, '"'.$row['name'].'" numeric');
+                        array_push($liste_champ_type, '"'.$row['name'].'" text');
                         array_push($liste_champ, '"'.$row['name'].'"');
 
                 }
+
+
 
         $query = "
         SELECT *
         FROM crosstab
         (
             'SELECT
-                date_trunc(''day'', date) as date,
+                mois as date,
                 id,
-                round(avg(value::numeric), 2) as value
+                round(min_value::numeric, 2) || '';'' || round(avg_value::numeric, 2) || '';'' || round(max_value::numeric, 2) as value
             FROM
-                onewire_data
-            JOIN onewire USING (id)
+                statistiques
             WHERE
-                value != '''' AND
-                type = ''temperature''
-            GROUP BY
-                id,
-                date_trunc(''day'', date)
+		id in (select distinct(id) from onewire_meta  where statistique = true)
             ORDER BY
                 1, 2',
 
             'SELECT DISTINCT
                 id
             FROM
-                onewire
+                onewire_meta
             WHERE
-                type = ''temperature''
+		statistique = true
             ORDER BY
                 1'
         )
@@ -255,7 +249,7 @@ switch($type)
             date timestamp,
             ".implode(',', $liste_champ_type)."
         )";
-        echo "Date".$s_separateur.implode($s_separateur, $liste_champ).$s_fin_ligne;
+echo "Date".$s_separateur.implode($s_separateur, $liste_champ).$s_fin_ligne;
         $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
 
                 while ($row = pg_fetch_assoc($result))

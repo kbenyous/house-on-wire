@@ -13,19 +13,25 @@
     font: bold;
 }
 
-#stats .min {
-    background-color: #CCFFFF;
+.min {
+    background-color: #98AFC7;
     text-align: right;
 }
 
-#stats .moy {
+.moy {
 /*    background-color: yellow;*/
-    text-align: right;
+    text-align: center;
+    float: left;
+    width: 50%;
 }
 
 
-#stats .max {
-    background-color: #FFCCCC;
+.max {
+    background-color: #E55451;
     text-align: right;
 }
 
+.delta {
+  float: right;
+  width: 50%;
+}

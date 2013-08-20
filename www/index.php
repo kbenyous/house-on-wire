@@ -119,7 +119,7 @@
                     ?>
                     <div class="tabBody stats hidden">
                         <div id="statistiques">
-                            <iframe frameborder="0" scrolling="no" width="1200px" 
+                            <iframe frameborder="0" scrolling="yes" width="1200px" 
                                     height="630px" src="php/statistiques.php">
                             </iframe>
 

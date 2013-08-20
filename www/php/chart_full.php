@@ -18,7 +18,7 @@
 $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
 $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port']." dbname=".$config['bdd']['dbname']." user=".$config['bdd']['username']." password=".$config['bdd']['password']." options='--client_encoding=UTF8'") or die("Erreur de connexion au serveur SQL");
 
-$result = pg_query( $db, "SELECT * from onewire where type ='temperature' order by id" ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
+$result = pg_query( $db, "SELECT * from onewire where type ='temperature' and id in ('10.22E465020800', '10.28BD65020800', '10.380166020800', '10.A8EB65020800', '10.D6F865020800', '10.EDFA65020800', '28.BB1A53030000') order by id" ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_error() );
 $i = 0;
 
 $labels = array();
@@ -42,7 +42,6 @@ while ($row = pg_fetch_array($result))
 
     // containing div
     document.getElementById("graphdiv"),
-//"data.csv",
 '/php/get_data_csv.php?type=temp_full&sonde=all',
 {
 title: 'Historique des températures par pièce',

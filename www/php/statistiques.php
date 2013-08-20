@@ -23,12 +23,22 @@
 
     $result = pg_query(
         $db,
-	'select distinct(id) from onewire_meta where statistique = true order by id;'
+	'select distinct(id), coalesce(om.name, o.name) as name from onewire_meta om left join onewire o using (id)  where statistique = true order by id;'
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 
     $stats_ids= array();
+    $entete_label = "";
+    $entete_val = "";
+    $i = 0;
+    $labels = array();
+    array_push($labels, '"Date"');
+
     while($row = pg_fetch_array($result)) {
-        $stats_ids[] = $row['id'];
+        $stats_ids[$row['id']] = $row['name'];
+	$entete_label .= "<td rowspan=2><input id='".$i."' type=\"checkbox\" checked=\"\" onclick=\"change(this)\"><label for='".$i."'>".$row['name']."</label></td>";
+        array_push($labels, '"'.$row['name'].'"');
+        $i++;
+
     }
 ?>
 
@@ -39,30 +49,24 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <![endif]-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="/js/dygraph-combined.js"></script>
+
         <link rel="stylesheet" type="text/css" href="/css/statistiques.css" />
     </head>
     <body>
-	<table id="stats" border=1 width="100%">
+<div id="graphdiv" style="width:1100px; height:400px; "></div>
+
+<div id="tablediv">
+
+
+	<table id="stats" border=1>
 	   <thead>	
 		<tr class="entete">
 			<td rowspan=2></td>
-<?
-        foreach ($stats_ids as $id)
-        {
-            echo "            <td colspan=3>".$id."</td>";
-                        
-        }
-?>
+			<? echo $entete_label; ?>
 			<td colspan=4>Consommation éléctrique</td>
 		</tr>
 		<tr class="entete">
-<?      
-        foreach ($stats_ids as $id)
-        {
-            echo "           <td class=\"min\">Minimum</td><td class=\"moy\">Moyenne</td><td class=\"max\">Maximum</td>";
-                        
-        }
-?>
                         <td>H. Pleines</td><td>H. Creuses</td><td>Total</td><td>Cout</td>
 		</tr>
 	</thead>
@@ -79,18 +83,15 @@ foreach ($months as $month) {
 
 echo "                <tr class=\"content\">
                         <td class=\"libelle\">".$row['month_string']."</td>";
-	foreach ($stats_ids as $id)
+	foreach ($stats_ids as $id => $name)
 	{
 	    $result = pg_query(
         	$db,
-	        'select round(min_value::numeric, 2) as min_value, round(avg_value::numeric, 2) as avg_value, round(max_value::numeric, 2) as max_value from statistiques where id = \''.$id.'\' and mois = \''.$month.'\''
+	        'select round(min_value::numeric, 1) as min_value, round(avg_value::numeric, 1) as avg_value, round(max_value::numeric, 1) as max_value from statistiques where id = \''.$id.'\' and mois = \''.$month.'\''
 	    ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 
     	    $row = pg_fetch_array($result);
-            echo "            <td class=\"min\">".$row['min_value']."</td>
-                        <td class=\"moy\">".$row['avg_value']."</td>
-                        <td class=\"max\">".$row['max_value']."</td>";
-                        
+            echo "            <td><div class=\"moy\">".$row['avg_value']." °C</div><div class=\"delta\"><div class=\"max\">".$row['max_value']." °C</div><div class=\"min\">".$row['min_value']." °C</div></div></td>";
 	}
 
             $result = pg_query(
@@ -112,6 +113,44 @@ echo "                        <td>".$row['hchc']."</td>
 }
 ?>
 	</table>
+</div>
+
+<script type="text/javascript">
+
+  g = new Dygraph(
+
+    // containing div
+    document.getElementById("graphdiv"),
+'/php/get_data_csv.php?type=temp_full&sonde=all',
+{
+title: 'Historique des températures',
+customBars: true,
+label: [<?=implode($labels, ',');?>],
+ylabel: 'Temperature (C)',
+legend: 'always',
+labelsSeparateLines: true,
+
+        highlightCircleSize: 2,
+        strokeWidth: 1,
+
+
+        highlightSeriesOpts: {
+          strokeWidth: 3,
+backgroundAlpha: 1,
+
+          strokeBorderWidth: 1,
+          highlightCircleSize: 5,
+        },
+
+}
+  );
+
+function change(el) {
+g.setVisibility(el.id, el.checked);
+}
+
+</script>
+
 
     </body>
 </html>
