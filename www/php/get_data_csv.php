@@ -167,6 +167,57 @@ switch($type)
 
         break;
 
+// récupération des statistiques de température à partir de la table Statistique
+// rapide, mais pas de détail par jour, uniquement la vision mois précalculée)
+	case 'temp_stat' :
+		echo "Mois".$s_separateur."Max".$s_separateur."Moy".$s_separateur."Min".$s_fin_ligne;
+               	$query = "select mois,round(max_value::numeric, 1) as Max, round(avg_value::numeric, 1) as Moy, round(min_value::numeric, 1) as Min
+			from statistiques
+			where id = '".$sonde."'
+			order by mois asc";
+         	$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+              	while ($row = pg_fetch_array($result))
+              	{
+      	        	echo $row['mois'].$s_separateur.$row['max'].$s_separateur.$row['moy'].$s_separateur.$row['min'].$s_fin_ligne;
+      	        }
+       break;
+// construction statistique de température en fonction de annee et sonde à partir des données full
+	case 'temp_year' :
+		echo "Mois".$s_separateur."Max".$s_separateur."Moy".$s_separateur."Min".$s_fin_ligne;
+		$query = "select substring(date_trunc('month', date)::text,1,7) as mois, 
+						round(max(value::numeric),1) as tempMax,
+						round(avg(value::numeric),1) as tempMoy,
+						round(min(value::numeric),1) as tempMin
+				from onewire_data
+				where id = '".$_GET['sonde']."'
+					and date_trunc('year',date)= '".$_GET['date']."' 
+			group by date_trunc('month',date)
+			order by date_trunc('month',date)";
+		$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+		while ($row = pg_fetch_array($result))
+		{
+			echo $row['mois'].$s_separateur.$row['tempmax'].$s_separateur.$row['tempmoy'].$s_separateur.$row['tempmin'].$s_fin_ligne;
+		}
+	break;
+			
+	case 'temp_month' :
+		echo "Jour".$s_separateur."Max".$s_separateur."Moy".$s_separateur."Min".$s_fin_ligne;
+		$query = "select substring(date_trunc('day', date)::text,1,10) as jour, 
+				round(max(value::numeric),1) as tempMax,
+				round(avg(value::numeric),1) as tempMoy, 
+				round(min(value::numeric),1) as tempMin
+			from onewire_data
+			where id ='".$_GET['sonde']."'
+			and date_trunc('month',date)= '".$_GET['date']."'
+			group by date_trunc('day',date)
+			order by date_trunc('day',date)";
+		$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+		while ($row = pg_fetch_array($result))
+		{
+			echo $row['jour'].$s_separateur.$row['tempmax'].$s_separateur.$row['tempmoy'].$s_separateur.$row['tempmin'].$s_fin_ligne;
+		}
+	break;
+
 
     case 'full' :
         if($use_cache)
@@ -328,6 +379,39 @@ echo "Date".$s_separateur.implode($s_separateur, $liste_champ).$s_fin_ligne;
 		echo date('Y-m-d 00:00:00').$s_separateur.$row['hchp'].$s_separateur.$row['hchc'].$s_fin_ligne;
               break;
 
+	case 'rain' :
+		echo "Date".$s_separateur."Cumul".$s_separateur."Cumul Mensuel".$s_fin_ligne;
+               	$query = "select date::date, total_rain, sum(total_rain) OVER (ORDER BY date) as monthly_total_rain 
+               		from ( 
+               			select date_trunc('day', date) as date, round((max(value::integer) - min(value::integer))::numeric, 1) as total_rain 
+               			from onewire_data where id = '".$sonde."' and date_trunc('month', date) = '".$_GET['month']."' 
+               			group by date_trunc('day', date) order by date_trunc('day', date)) foo 
+               		group by date, total_rain;";
+               	$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+               	
+               	while ($row = pg_fetch_array($result))
+               	{
+               	        echo $row['date'].$s_separateur.$row['total_rain'].$s_separateur.$row['monthly_total_rain'].$s_fin_ligne;
+               	}
+       break;
+               
+	case 'raintotal' :
+		echo "Date".$s_separateur."Cumul Mensuel".$s_separateur."Cumul Annuel".$s_fin_ligne;
+		$query = "select date::date, total_rain, sum(total_rain) OVER (ORDER BY date) as yearly_total_rain
+			  from (
+			  	select date_trunc('month', date) as date, round((max(value::numeric) - min(value::numeric))::numeric, 1) as total_rain
+			  	from onewire_data
+				where id = 'PCR918N.rt' and date_trunc('year', date) = '".$_GET['year']."' 
+				group by date_trunc('month', date) 
+				order by date_trunc('month', date)) foo 
+			  group by date, total_rain;";
+		$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+		
+		while ($row = pg_fetch_array($result))
+		{
+			echo $row['date'].$s_separateur.$row['total_rain'].$s_separateur.$row['yearly_total_rain'].$s_fin_ligne;
+		}
+	break;
 
         case 'conso_elect_full' :
                 echo "Date".$s_separateur."Heures Pleines".$s_separateur."Heures Creuses".$s_separateur."Total".$s_fin_ligne;

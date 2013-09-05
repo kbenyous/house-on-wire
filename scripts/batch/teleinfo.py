@@ -8,7 +8,7 @@ class Teleinfo:
 
 	ser = serial.Serial()
 	
-	def __init__ (self, port='/dev/ttyUSB0'):
+	def __init__ (self, port='/dev/teleinfo'):
 		self.ser = serial.Serial(port, baudrate=1200, bytesize=serial.SEVENBITS, parity=serial.PARITY_EVEN)
 	
 	def checksum (self, etiquette, valeur):
@@ -48,7 +48,7 @@ class Teleinfo:
 
 if __name__ == "__main__":
 	ti = Teleinfo()
-	db = psycopg2.connect("host=localhost dbname=houseonwire user=houseonwire")
+	db = psycopg2.connect("host=localhost dbname=homedata user=supervision")
 	while True:
 		data = ti.read()
 		dbc = db.cursor()
@@ -59,3 +59,6 @@ if __name__ == "__main__":
 			   datetime.datetime.now() ) )
 		dbc.execute( "COMMIT;" );
 		dbc.close()
+		text_file = open("/tmp/papp", "w")
+		text_file.write("%s"%data["PAPP"])
+		text_file.close()

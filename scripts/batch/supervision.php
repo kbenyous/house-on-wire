@@ -331,7 +331,9 @@ ncurses_mvwaddstr($br, 4, 38, sprintf("%6s",$ext_hier['max'])." ".$ext_now['unit
 ncurses_wcolor_set($br, 0);
 
 
-$xml = simplexml_load_file('http://free.worldweatheronline.com/feed/weather.ashx?q=saint-etienne-de-montluc,44360&format=xml&num_of_days=3&key=c2980fcdc8213432131602');
+//$xml = simplexml_load_file('http://free.worldweatheronline.com/feed/weather.ashx?q=saint-etienne-de-montluc,44360&format=xml&num_of_days=3&key=c2980fcdc8213432131602');
+$xml = simplexml_load_file('http://api.worldweatheronline.com/free/v1/weather.ashx?q=saint-etienne-de-montluc,44360&format=xml&num_of_days=3&key=b3h9ssfsb9ak59gww6cnnum8');
+
 
 if(isset($xml->weather[0]))
 {
@@ -431,7 +433,7 @@ $result = pg_query(
 
 
 
-
+/*
 
 $tmp=9;
 
@@ -533,7 +535,7 @@ ncurses_wcolor_set($bl, 0);
 ncurses_wattroff($bl, NCURSES_A_BOLD);
 ncurses_wattroff($bl, NCURSES_A_REVERSE);
 
-
+*/
 
 ncurses_wrefresh($tl);
 ncurses_wrefresh($tr);
@@ -541,13 +543,12 @@ ncurses_wrefresh($bl);
 ncurses_wrefresh($br);
 
 
-
 	
 	// Mise à jour des infos :
 	// 	Consommation electrique : Tous les secondes ( 1 boucle )
 	//	Reste des Infos ( Rechargement complet ? ) Toutes les 5 min ( 300 boucles )
 
-	// Boucle pour faire 60 boucles
+	// Boucle pour faire 300 boucles
 	for($i=0;$i<300;$i++)
 	{
 		// Mise à jour de heure
