@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>
-    	Pluviom&eacute;trie annuelle <? echo $_GET['year'];?> &agrave; Rennes
+    	Pluviom&eacute;trie 
     </title>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
@@ -14,24 +14,24 @@
     <script type="text/javascript">
     
       var getJSONandDisplay = function(){
-      		$.getJSON("http://maison.coroller.com/php/get_data_json.php?sonde=PCR918N.rt&year=<? echo $_GET['year'];?>&type=raintotal", function(data)
+      		$.getJSON("http://house.vitre.info/php/get_data_json.php?sonde=PCR800.rt&date=<? echo $_GET['date'];?>&type=<? echo $_GET['type'];?>", function(data)
 		{
-			var dataGoogle = [['Date','Pluie Mensuelle','Pluie Cumulee']];
+			var dataGoogle = [['Date','Pluie','Pluie Cumulee']];
 			for(i=0;i<data.length;i++)
 			{
-				dataGoogle[i+1] = [data[i].Date, parseFloat(data[i]["Cumul Mensuel"]), parseFloat(data[i]["Cumul Annuel"])];
+				dataGoogle[i+1] = [data[i].Date, parseFloat(data[i]["Valeur"]), parseFloat(data[i]["Cumul"])];
 			}
 
 			var dataGoogleVis = new google.visualization.arrayToDataTable(dataGoogle);
 			var ac = new google.visualization.ComboChart(document.getElementById('visualization'));
 			ac.draw(dataGoogleVis, {
 				focusTarget: 'category',
-  				title : 'Pluviometrie annuelle Rennes',
+  				title : 'Pluviometrie',
       				width: 800,
       				height: 400,
       				vAxes: [
-      					{ title: "mm / mois" },
-      					{ title: "mm / an" }
+      					{ title: "mm" },
+      					{ title: "mm" }
       				],
       				hAxis: {title: "Date"},
       				//seriesType: "bars",
@@ -52,8 +52,19 @@
     					  message += '{row:' + item.row + ',column:' + item.column + '}';
     					} else if (item.row != null) {
     					  //alert(dataGoogleVis.getFormattedValue(item.row,0));
-    					  window.location = 'http://maison.coroller.com/php/chart_rain.php?month='+dataGoogleVis.getFormattedValue(item.row,0);
-    					  message += '{row:' + item.row + '}';
+    					  <?php
+						switch($_GET['type'])
+						{
+							case 'monthly_rain' :
+								echo "window.location = 'http://house.vitre.info/php/chart_rain_total.php?type=daily_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
+								break;
+                                                        case 'daily_rain' :
+                                                                echo "window.location = 'http://house.vitre.info/php/chart_rain_total.php?type=hourly_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
+                                                                break;
+						}
+    					  
+					?>
+					message += '{row:' + item.row + '}';
     					} else if (item.column != null) {
     					  message += '{column:' + item.column + '}';
     					}

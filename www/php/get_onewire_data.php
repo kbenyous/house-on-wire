@@ -5,11 +5,19 @@ $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port'].
 
 $return['status'] = 'success';
 
-$id = $_POST['id'];
-if(!isset($id) || $id == '')
+if(isset($_POST['id']) && $_POST['id'] != '')
 {
-    $return['status'] = 'error';
+	$id = $_POST['id'];
 }
+elseif(isset($_GET['id']) && $_GET['id'] != '')
+{
+        $id = $_GET['id'];
+}
+else
+{
+        $return['status'] = 'error';
+}
+
 
 if($return['status'] == 'success')
 {
@@ -36,6 +44,7 @@ while ($row = pg_fetch_array($result))
 
 $query = "
 select
+    name,
     to_char(current_timestamp, 'DD-MM-YYYY HH24:MI') as maj,
     current,
     last_hour,
@@ -47,11 +56,12 @@ select
 from
     (
     select
-        (select case when last_update > current_timestamp - interval '20 minutes' then round(avg(last_value::numeric), 2) else 0::numeric end from onewire where id IN (".implode(',',$liste_id).") group by last_update) as current,
-        (select round(avg(value::numeric), 2) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 hour') as last_hour,
-        (select round(avg(value::numeric), 2) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as last_day,
-                (select round(min(value::numeric), 2) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as min_last_day,
-                (select round(max(value::numeric), 2) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as max_last_day
+	(select coalesce(om.name, o.name) as name from onewire_meta om left join onewire o using (id) where id = '".$id."' limit 1) as name,
+        (select case when last_update > current_timestamp - interval '20 minutes' then round(avg(last_value::numeric), 1) else 0::numeric end from onewire where id IN (".implode(',',$liste_id).") group by last_update) as current,
+        (select round(avg(value::numeric), 1) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 hour') as last_hour,
+        (select round(avg(value::numeric), 1) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as last_day,
+                (select round(min(value::numeric), 1) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as min_last_day,
+                (select round(max(value::numeric), 1) from onewire_data where id IN (".implode(',',$liste_id).") and date > current_timestamp - interval '1 day') as max_last_day
 
     ) a;";
 
@@ -59,6 +69,7 @@ $result = pg_query( $db, $query ) or die ("Erreur SQL : ". pg_result_error( $res
 
 $row = pg_fetch_array($result);
 
+$return['content']['name']['value'] = $row['name'];
 $return['content']['maj']['value'] = $row['maj'];
 $return['content']['last_value']['value'] = $row['current'];
 $return['content']['deltaPlusOneHour']['direction'] = $row['last_hour_variation'];

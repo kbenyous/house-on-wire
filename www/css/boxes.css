@@ -1,0 +1,432 @@
+        .box {
+		margin:10px;
+		display: inline-block;		
+		background-color: #ffffff;
+		border: 4px solid #7f7f7f;
+		border-radius: 15px;
+		box-shadow: inset 0px 0px 15px #7f7f7f;
+		padding: 10px;
+		background: linear-gradient(to bottom, #dedede, #fbfbfb);
+		font-family : Arial, sans-serif;
+	}
+
+
+	.box .separation {
+		border-left: 1px solid #a6a6a6;
+		background: linear-gradient(to right, #dfdfdf, #f2f2f2);
+                height: 100%;
+                vertical-align: top;
+                width: 8px; 
+	}
+
+        .box .separation_h {
+                border-top: 1px solid #a6a6a6;
+                background: linear-gradient(to bottom, #dfdfdf, #f2f2f2);
+                width: 100%;
+                vertical-align: top;
+                height: 8px;
+        }
+
+	.box .box_titre1 .titre {
+		font-size : 18px;		
+		color: #404040;
+		margin-top: -10px;
+	}
+
+        .box .box_titre1 .info {
+                float:right;
+		margin-left: 2px;
+        }
+
+
+	.box .box_titre1 .info img {
+		height:12px;
+	}
+
+        .box .box_titre2 .titre {
+                font-size : 24px;
+                color: #404040;
+                margin-top: -5px;
+        }
+
+        .box .box_titre2 .info {
+                float:right;
+                margin-left: 2px;
+        }
+
+
+        .box .box_titre2 .info img {
+                height:12px;
+        }
+
+
+        .box .box_body_1 {
+            height: 60px;
+   	    min-width:150px;
+	    text-align:center;
+        }
+
+        .box .box_body_2 {
+            height: 80px;
+        }
+
+        .box .box_body_3 {
+            height: 115px;
+        }
+
+        .box .box_body_4 {
+            height: 142px;
+	    text-align:center;
+        }
+
+	.empile {
+                display: inline-block;
+                position: relative;
+	}
+
+	.temp1 {
+
+	}
+	
+		.temp1 .value {
+			font-size : 45px; 
+			color: black;
+		}
+
+		.temp1 .unit {
+			font-size : 22px; 
+			color: black;
+		}
+
+		.temp1 .subtitle {
+			font-size : 11px; 
+			color : #7f7f7f;
+			margin-top : -5px;
+			text-align : right;
+		}
+	
+		.temp1 img {
+			margin:-3px; 
+			height:22px;
+		}
+	
+	.temp1_minmax {
+		margin-left:5px;
+		text-align:right;
+		font-style: italic;
+	}
+
+       		.temp1_minmax .value {
+			font-size : 15px; 
+			color: black;
+	        }
+
+	        .temp1_minmax .unit {
+			font-size : 10px; 
+			color: black;
+	        }
+
+	        .temp1_minmax .subtitle {
+			font-size : 11px; 
+			color: #7f7f7f;margin-top: -5px; 
+			font-style: italic;
+	        }
+
+        .hum1 {
+
+        }
+
+                .hum1 .value {
+			font-size : 36px; 
+			color: black;
+                }
+
+                .hum1 .unit {
+                	font-size : 18px; 
+			color: black;
+		}
+
+                .hum1 .subtitle {
+			font-size : 11px; 
+			color: #7f7f7f;
+			margin-top: -5px;
+			text-align:right;
+                }
+
+                .hum1 img {
+                        margin:-3px;
+                        height:18px;
+                }
+
+        .temp2 {
+
+        }
+
+                .temp2 .value {
+                        font-size : 60px;
+                        color: black;
+                }
+
+                .temp2 .unit {
+                        font-size : 30px;
+                        color: black;
+                }
+
+                .temp2 .subtitle {
+                        font-size : 14px;
+                        color : #7f7f7f;
+                        margin-top : -5px;
+                        text-align : right;
+                }
+
+                .temp2 img {
+                        margin:-3px;
+                        height:30px;
+                }
+
+        .temp2_minmax {
+                margin-left:5px;
+                text-align:right;
+                font-style: italic;
+        }
+
+                .temp2_minmax .value {
+                        font-size : 20px;
+                        color: black;
+                }
+
+                .temp2_minmax .unit {
+                        font-size : 10px;
+                        color: black;
+                }
+
+                .temp2_minmax .subtitle {
+                        font-size : 14px;
+                        color: #7f7f7f;margin-top: -5px;
+                        font-style: italic;
+                }
+
+        .hum2 {
+
+        }
+
+                .hum2 .value {
+                        font-size : 50px;
+                        color: black;
+                }
+
+                .hum2 .unit {
+                        font-size : 25px;
+                        color: black;
+                }
+
+                .hum2 .subtitle {
+                        font-size : 14px;
+                        color: #7f7f7f;
+                        margin-top: -5px;
+                        text-align:right;
+                }
+
+                .hum2 img {
+                        margin:-3px;
+                        height:25px;
+                }
+
+        .temp3 {
+
+        }
+
+                .temp3 .value {
+                        font-size : 90px;
+                        color: black;
+                }
+
+                .temp3 .unit {
+                        font-size : 45px;
+                        color: black;
+                }
+
+                .temp3 .subtitle {
+                        font-size : 14px;
+                        color : #7f7f7f;
+                        margin-top : -10px;
+                        text-align : right;
+                }
+
+                .temp3 img {
+                        margin:-3px;
+                        height:45px;
+                }
+
+        .temp3_minmax {
+                margin-left:10px;
+                text-align:right;
+                font-style: italic;
+        }
+
+                .temp3_minmax .value {
+                        font-size : 30px;
+                        color: black;
+                }
+
+                .temp3_minmax .unit {
+                        font-size : 15px;
+                        color: black;
+                }
+
+                .temp3_minmax .subtitle {
+                        font-size : 14px;
+                        color: #7f7f7f;margin-top: -10px;
+                        font-style: italic;
+                }
+
+        .hum_press {
+		text-align:center;
+        }
+
+        .hum3 {
+
+        }
+
+                .hum3 .value {
+                        font-size : 36px;
+                        color: black;
+                }
+
+                .hum3 .unit {
+                        font-size : 18px;
+                        color: black;
+                }
+
+                .hum3 .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;
+                        margin-top: -5px;
+                        text-align:right;
+                }
+
+                .hum3 img {
+                        margin:-3px;
+                        height:18px;
+                }
+
+        .hum3_minmax {
+                margin-left:10px;
+                text-align:right;
+                font-style: italic;
+        }
+
+                .hum3_minmax .value {
+                        font-size : 14px;
+                        color: black;
+                }
+
+                .hum3_minmax .unit {
+                        font-size : 10px;
+                        color: black;
+                }
+
+                .hum3_minmax .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;margin-top: -5px;
+                        font-style: italic;
+                }
+
+        .press3 {
+
+        }
+
+                .press3 .value {
+                        font-size : 36px;
+                        color: black;
+                }
+
+                .press3 .unit {
+                        font-size : 18px;
+                        color: black;
+                }
+
+                .press3 .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;
+                        margin-top: -5px;
+                        text-align:right;
+                }
+
+                .press3 img {
+                        margin:-3px;
+                        height:18px;
+                }
+
+        .pluiv {
+		text-align:right; 
+		margin-right: 8px; 
+		margin-left: 8px;
+        }
+
+                .pluiv .value {
+                        font-size : 45px;
+                        color: black;
+                }
+
+                .pluiv .unit {
+                        font-size : 22px;
+                        color: black;
+                }
+
+                .pluiv .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;
+                        margin-top: -11px;
+                        text-align:right;
+                }
+
+
+        .elect_i {
+		display: inline-block;
+        }
+
+                .elect_i .value {
+                        font-size : 36px;
+                        color: black;
+                }
+
+                .elect_i .unit {
+                        font-size : 18px;
+                        color: black;
+                }
+
+                .elect_i .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;
+                        margin-top: -5px;
+                        text-align:right;
+                }
+
+        .elect_2 {
+		width:40%; 
+		margin-right: 10px;
+        }
+
+
+        .elect {
+        }
+
+                .elect .value {
+                        font-size : 30px;
+                        color: black;
+                }
+
+                .elect .unit {
+                        font-size : 15px;
+                        color: black;
+                }
+
+                .elect .subtitle {
+                        font-size : 11px;
+                        color: #7f7f7f;
+                        margin-top: -7px;
+                        text-align:right;
+                }
+
+

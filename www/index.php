@@ -49,6 +49,11 @@
 
         $tabscontainers .= "<div class=\"tabBody ".$row['level']." $hidden\">\n";
         $tabscontainers .= "<div id=\"".$row['level']."\" class=\"widgets\"></div>\n";
+
+		if($row['level']=="meteo")
+		{
+			$tabscontainers .= "<a href='http://house.vitre.info/php/chart_rain_total.php?year=2013-01-01'>Graph pluviometrie</a><br/>";
+		}
         $tabscontainers .= "</div>\n";
 
     }

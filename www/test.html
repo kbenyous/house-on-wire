@@ -6,391 +6,8 @@
         <![endif]-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <style type="text/css">
-        .box {
-		margin:10px;
-		display: inline-block;		
-		background-color: #ffffff;
-		border: 4px solid #7f7f7f;
-		border-radius: 15px;
-		box-shadow: inset 0px 0px 15px #7f7f7f;
-		padding: 10px;
-		background: linear-gradient(to bottom, #dedede, #fbfbfb);
-		font-family : Arial, sans-serif;
-	}
+        <link rel="stylesheet" type="text/css" href="/css/boxes.css" />
 
-
-	.box .separation {
-		border-left: 1px solid #a6a6a6;
-		background: linear-gradient(to right, #dfdfdf, #f2f2f2);
-                height: 100%;
-                vertical-align: top;
-                width: 8px; 
-	}
-
-        .box .separation_h {
-                border-top: 1px solid #a6a6a6;
-                background: linear-gradient(to bottom, #dfdfdf, #f2f2f2);
-                width: 100%;
-                vertical-align: top;
-                height: 8px;
-        }
-
-	.box .box_titre1 .titre {
-		font-size : 18px;		
-		color: #404040;
-		margin-top: -10px;
-	}
-
-        .box .box_titre1 .info {
-                float:right;
-        }
-
-
-	.box .box_titre1 .info img {
-		height:12px;
-	}
-
-        .box .box_titre2 .titre {
-                font-size : 24px;
-                color: #404040;
-                margin-top: -5px;
-        }
-
-        .box .box_titre2 .info {
-                float:right;
-        }
-
-
-        .box .box_titre2 .info img {
-                height:12px;
-        }
-
-
-        .box .box_body_1 {
-            height: 60px;
-   	    min-width:150px;
-	    text-align:center;
-        }
-
-        .box .box_body_2 {
-            height: 80px;
-        }
-
-        .box .box_body_3 {
-            height: 115px;
-        }
-
-        .box .box_body_4 {
-            height: 142px;
-        }
-
-	.empile {
-                display: inline-block;
-                position: relative;
-	}
-
-	.temp1 {
-
-	}
-	
-		.temp1 .value {
-			font-size : 45px; 
-			color: black;
-		}
-
-		.temp1 .unit {
-			font-size : 22px; 
-			color: black;
-		}
-
-		.temp1 .subtitle {
-			font-size : 11px; 
-			color : #7f7f7f;
-			margin-top : -5px;
-			text-align : right;
-		}
-	
-		.temp1 img {
-			margin:-3px; 
-			height:18px;
-		}
-	
-	.temp1_minmax {
-		margin-left:5px;
-		text-align:right;
-		font-style: italic;
-	}
-
-       		.temp1_minmax .value {
-			font-size : 15px; 
-			color: black;
-	        }
-
-	        .temp1_minmax .unit {
-			font-size : 7px; 
-			color: black;
-	        }
-
-	        .temp1_minmax .subtitle {
-			font-size : 11px; 
-			color: #7f7f7f;margin-top: -5px; 
-			font-style: italic;
-	        }
-
-        .hum1 {
-
-        }
-
-                .hum1 .value {
-			font-size : 36px; 
-			color: black;
-                }
-
-                .hum1 .unit {
-                	font-size : 18px; 
-			color: black;
-		}
-
-                .hum1 .subtitle {
-			font-size : 11px; 
-			color: #7f7f7f;
-			margin-top: -5px;
-			text-align:right;
-                }
-
-                .hum1 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .temp2 {
-
-        }
-
-                .temp2 .value {
-                        font-size : 60px;
-                        color: black;
-                }
-
-                .temp2 .unit {
-                        font-size : 30px;
-                        color: black;
-                }
-
-                .temp2 .subtitle {
-                        font-size : 14px;
-                        color : #7f7f7f;
-                        margin-top : -5px;
-                        text-align : right;
-                }
-
-                .temp2 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .temp2_minmax {
-                margin-left:5px;
-                text-align:right;
-                font-style: italic;
-        }
-
-                .temp2_minmax .value {
-                        font-size : 20px;
-                        color: black;
-                }
-
-                .temp2_minmax .unit {
-                        font-size : 10px;
-                        color: black;
-                }
-
-                .temp2_minmax .subtitle {
-                        font-size : 14px;
-                        color: #7f7f7f;margin-top: -5px;
-                        font-style: italic;
-                }
-
-        .hum2 {
-
-        }
-
-                .hum2 .value {
-                        font-size : 50px;
-                        color: black;
-                }
-
-                .hum2 .unit {
-                        font-size : 25px;
-                        color: black;
-                }
-
-                .hum2 .subtitle {
-                        font-size : 14px;
-                        color: #7f7f7f;
-                        margin-top: -5px;
-                        text-align:right;
-                }
-
-                .hum2 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .temp3 {
-
-        }
-
-                .temp3 .value {
-                        font-size : 90px;
-                        color: black;
-                }
-
-                .temp3 .unit {
-                        font-size : 45px;
-                        color: black;
-                }
-
-                .temp3 .subtitle {
-                        font-size : 14px;
-                        color : #7f7f7f;
-                        margin-top : -10px;
-                        text-align : right;
-                }
-
-                .temp3 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .temp3_minmax {
-                margin-left:10px;
-                text-align:right;
-                font-style: italic;
-        }
-
-                .temp3_minmax .value {
-                        font-size : 30px;
-                        color: black;
-                }
-
-                .temp3_minmax .unit {
-                        font-size : 15px;
-                        color: black;
-                }
-
-                .temp3_minmax .subtitle {
-                        font-size : 14px;
-                        color: #7f7f7f;margin-top: -10px;
-                        font-style: italic;
-                }
-
-        .hum_press {
-		text-align:center;
-        }
-
-        .hum3 {
-
-        }
-
-                .hum3 .value {
-                        font-size : 36px;
-                        color: black;
-                }
-
-                .hum3 .unit {
-                        font-size : 18px;
-                        color: black;
-                }
-
-                .hum3 .subtitle {
-                        font-size : 11px;
-                        color: #7f7f7f;
-                        margin-top: -5px;
-                        text-align:right;
-                }
-
-                .hum3 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .hum3_minmax {
-                margin-left:10px;
-                text-align:right;
-                font-style: italic;
-        }
-
-                .hum3_minmax .value {
-                        font-size : 12px;
-                        color: black;
-                }
-
-                .hum3_minmax .unit {
-                        font-size : 6px;
-                        color: black;
-                }
-
-                .hum3_minmax .subtitle {
-                        font-size : 11px;
-                        color: #7f7f7f;margin-top: -5px;
-                        font-style: italic;
-                }
-
-        .press3 {
-
-        }
-
-                .press3 .value {
-                        font-size : 36px;
-                        color: black;
-                }
-
-                .press3 .unit {
-                        font-size : 18px;
-                        color: black;
-                }
-
-                .press3 .subtitle {
-                        font-size : 11px;
-                        color: #7f7f7f;
-                        margin-top: -5px;
-                        text-align:right;
-                }
-
-                .press3 img {
-                        margin:-3px;
-                        height:18px;
-                }
-
-        .pluiv {
-		text-align:right; 
-		margin-right: 8px; 
-		margin-left: 8px;
-        }
-
-                .pluiv .value {
-                        font-size : 45px;
-                        color: black;
-                }
-
-                .pluiv .unit {
-                        font-size : 22px;
-                        color: black;
-                }
-
-                .pluiv .subtitle {
-                        font-size : 11px;
-                        color: #7f7f7f;
-                        margin-top: -11px;
-                        text-align:right;
-                }
-
-
-
-
-        </style>
         <title>House On Wire</title>
     </head>
     <body>
@@ -399,14 +16,14 @@
 			<div class="titre empile">
 				Chambre Parents
 			</div>
+                        <div class="empile info"><img src='/image/Battery1.png'/></div>
                         <div class="empile info"><img src='/image/SignalLevel3'/></div>
-			<div class="empile info"><img src='/image/Battery2.png'/></div>
 		</div>
                 <div class="box_body_1">
                         <div class="empile">
                                 <div class="empile temp1">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowUpGreen.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -426,7 +43,7 @@
 			<div class="separation empile">&nbsp;</div>
 			<div class="empile hum1">
                         	<div class="empile value">48</div>
-				<div class="empile"><img src='/image/ArrowDownG.png'/></div>
+				<div class="empile"><img src='/image/ArrowDownGrey.png'/></div>
 	                        <div class="empile unit">%</div>
         	                <div class="subtitle" >Humidité</div>
                 	</div>
@@ -438,15 +55,15 @@
         	                <div class="titre empile">
                 	                Chambre Parents
                         	</div>
-	                        <div class="empile info"><img src='/image/SignalLevel3'/></div>
-	                        <div class="empile info"><img src='/image/Battery2.png'/></div>
+	                        <div class="empile info"><img src='/image/Battery1b.png'/></div>
+                                <div class="empile info"><img src='/image/SignalLevel2'/></div>
         	        </div>
                 </div>
                 <div class="box_body_1">
 	                <div class="empile">
                                 <div class="empile temp1">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowUpGreen.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -454,7 +71,7 @@
                         <div class="separation empile">&nbsp;</div>
                         <div class="empile hum1">
                                 <div class="empile value">48</div>
-                                <div class="empile"><img src='/image/ArrowDownG.png'/></div>
+                                <div class="empile"><img src='/image/ArrowDownGrey.png'/></div>
                                 <div class="empile unit">%</div>
                                 <div class="subtitle" >Humidité</div>
                         </div>
@@ -465,14 +82,14 @@
                         <div class="titre empile">
                                 Ch. Parents
                         </div>
-                        <div class="empile info"><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info"><img src='/image/Battery2.png'/></div>
+                        <div class="empile info"><img src='/image/Battery1.png'/></div>
+                        <div class="empile info"><img src='/image/SignalLevel1'/></div>
                 </div>
                 <div class="box_body_1">
                         <div class="empile">
                                 <div class="empile temp1">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowUpGreen.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -496,14 +113,14 @@
                         <div class="titre empile">
                                 Ch. Rejeton
                         </div>
-                        <div class="empile info"><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info"><img src='/image/Battery2.png'/></div>
+                        <div class="empile info"><img src='/image/Battery4.png'/></div>
+                        <div class="empile info"><img src='/image/SignalLevel4'/></div>
                 </div>
                 <div class="box_body_1">
                         <div class="empile">
                                 <div class="empile temp1">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowUpGreen.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -516,14 +133,14 @@
                         <div class="titre empile">
                                 Salon
                         </div>
-                        <div class="empile info"><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info"><img src='/image/Battery2.png'/></div>
+                        <div class="empile info"><img src='/image/Battery4.png'/></div>
+                        <div class="empile info"><img src='/image/SignalLevel5'/></div>
                 </div>
                 <div class="box_body_2">
                         <div class="empile">
                                 <div class="empile temp2">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowUpGreen.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -543,7 +160,7 @@
                         <div class="separation empile">&nbsp;</div>
                         <div class="empile hum2">
                                 <div class="empile value">48</div>
-                                <div class="empile"><img src='/image/ArrowDownG.png'/></div>
+                                <div class="empile"><img src='/image/ArrowDownGrey.png'/></div>
                                 <div class="empile unit">%</div>
                                 <div class="subtitle">Humidité</div>
                         </div>
@@ -554,14 +171,14 @@
                         <div class="titre empile">
                                 Extérieur
                         </div>
+                        <div class="empile info" ><img src='/image/Battery1.png'/></div>
                         <div class="empile info" ><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info" ><img src='/image/Battery2.png'/></div>
                 </div>
                 <div class="box_body_3">
                         <div class="empile">
                                 <div class="empile temp3">
                                         <div class="empile value">26,2</div>
-                                        <div class="empile"><img src='/image/ArrowUp.png'/></div>
+                                        <div class="empile"><img src='/image/ArrowDownRed.png'/></div>
                                         <div class="empile unit">°C</div>
                                         <div class="subtitle">Température</div>
                                 </div>
@@ -583,7 +200,7 @@
                                 <div>
                                         <div class="empile hum3">
 				                <div class="empile value">48</div>
-				                <div class="empile"><img src='/image/ArrowDownG.png'/></div>
+				                <div class="empile"><img src='/image/ArrowDownGrey.png'/></div>
 				                <div class="empile unit">%</div>
 				                <div class="subtitle">Humidité</div>
                                         </div>
@@ -603,7 +220,7 @@
                                 <div class="separation_h">&nbsp;</div>
                                 <div class="press3">
 			                <div class="empile value">1012</div>
-			                <div class="empile"><img src='/image/ArrowDownG.png'/></div>
+			                <div class="empile"><img src='/image/ArrowDownGrey.png'/></div>
 			                <div class="empile unit">HPa</div>
 			                <div class="subtitle">Pression</div>
                                 </div>
@@ -620,8 +237,8 @@
                         <div class="titre empile">
                                 Pluviométrie
                         </div>
-                        <div class="empile info" ><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info" ><img src='/image/Battery2.png'/></div>
+                        <div class="empile info" ><img src='/image/Battery4.png'/></div>
+                        <div class="empile info" ><img src='/image/SignalLevel1'/></div>
                 </div>
                 <div class="box_body_3">
 			<div class="empile pluiv" >
@@ -650,43 +267,45 @@
                         </div>
                 </div>
         </div>
+
         <div class="box">
                         <div class="box_titre2 empile">
                                 <div class="titre">Conso. Electricité</div>
                         </div>
-                <div class="box_body_4" style="text-align:center;">
-                                <div style="display: inline-block;">
-					<div style="font-size : 36px; color: black;" class="empile">522</div>
-                                        <div style="font-size : 18px; color: black;" class="empile">W</div>
-                                        <div style="font-size : 11px; color: #7f7f7f;margin-top: -5px;text-align:right;">Instantanée</div>
+                <div class="box_body_4">
+                                <div class="elect_i" >
+                                        <div class="empile value">522</div>
+                                        <div class="empile unit">W</div>
+                                        <div class="subtitle">Instantanée</div>
                                 </div>
                        <div class="separation_h">&nbsp;</div>
 
                         <div style="text-align:right;">
-                                <div class="empile" >
-                                        <div style="font-size : 30px; color: black;" class="empile">20,5</div>
-                                        <div style="font-size : 15px; color: black;" class="empile">Kw</div>
-                                        <div style="font-size : 11px; color: #7f7f7f;margin-top: -7px;text-align:right;">Jour</div>
+                                <div class="empile elect" >
+                                        <div class="empile value">20,5</div>
+                                        <div class="empile unit">Kw</div>
+                                        <div class="subtitle">Jour</div>
                                 </div>
-                                <div class="empile" style="width:40%; margin-right: 10px;">
-                                        <div style="font-size : 30px; color: #7F7F7F;" class="empile">35</div>
-                                        <div style="font-size : 15px; color: #7F7F7F;" class="empile">€</div>
-                                        <div style="font-size : 11px; color: #7f7f7f;margin-top: -7px;text-align:right;">&nbsp;</div>
+                                <div class="empile elect elect_2">
+                                        <div class="empile value">35</div>
+                                        <div class="empile unit">€</div>
+                                        <div class="subtitle">&nbsp;</div>
                                 </div>
                                 <div></div>
-                                <div class="empile" >
-                                        <div style="font-size : 30px; color: black;" class="empile">150</div>
-                                        <div style="font-size : 15px; color: black;" class="empile">Kw</div>
-                                        <div style="font-size : 11px; color: #7f7f7f;margin-top: -7px;text-align:right;">Mois</div>
+                                <div class="empile elect" >
+                                        <div class="empile value">150</div>
+                                        <div class="empile unit">Kw</div>
+                                        <div class="subtitle">Mois</div>
                                 </div>
-                                <div class="empile" style="width:40%; margin-right: 10px;">
-                                        <div style="font-size : 30px; color: #7F7F7F;" class="empile">160</div>
-                                        <div style="font-size : 15px; color: #7F7F7F;" class="empile">€</div>
-                                        <div style="font-size : 11px; color: #7f7f7f;margin-top: -7px;text-align:right;">&nbsp;</div>
+                                <div class="empile elect elect_2">
+                                        <div class="empile value">160</div>
+                                        <div class="empile unit">€</div>
+                                        <div class="subtitle">&nbsp;</div>
                                 </div>
                         </div>
                 </div>
         </div>
+
 
     </body>
 </html>

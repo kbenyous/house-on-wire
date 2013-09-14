@@ -9,7 +9,7 @@
     
  
     // Set your CSV feed
-    $feed = 'http://maison.coroller.com/php/get_data_csv.php?'.$_SERVER['QUERY_STRING'];
+    $feed = 'http://house.vitre.info/php/get_data_csv.php?'.$_SERVER['QUERY_STRING'];
     
     // Arrays we'll use later
     $keys = array();

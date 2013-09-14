@@ -1,0 +1,375 @@
+<?php
+$config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
+
+function insert_box1_temp($db, $id, $show_min_max = false)
+{
+	insert_box1($db, $id.'.t', $show_min_max, null, $id.'.b', $id.'.s');	
+}
+function insert_box1_temphum($db, $id, $show_min_max = false)
+{
+	insert_box1($db, $id.'.t', $show_min_max, $id.'.h', $id.'.b', $id.'.s');
+}
+
+function insert_box2_temphum($db, $id, $show_min_max = false)
+{
+        insert_box2($db, $id.'.t', $show_min_max, $id.'.h', $id.'.b', $id.'.s');
+}
+
+function insert_box3_temphumpress($db, $id, $id_press)
+{
+	insert_box3($db, $id.'.t', $id.'.h', $id_press.'.p', $id.'.b', $id.'.s');
+}
+
+function get_simple_data($db, $id)
+{
+	$query = "SELECT * FROM onewire_data where id = '".$id."' AND date > current_timestamp - interval '20 minutes' order by date desc limit 1";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        return pg_fetch_array($result);
+}
+
+function get_data_variation($db, $id)
+{
+$query = "select
+    round(current, 0) as current,
+    case when current>last_hour then 'increase' else 'decrease' end as last_hour_variation
+from
+    (
+    select
+        (select case when last_update > current_timestamp - interval '20 minutes' then round(avg(last_value::numeric), 1) else 0::numeric end from onewire where id = '".$id."' group by last_update) as current,
+        (select round(avg(value::numeric), 1) from onewire_data where id = '".$id."' and date > current_timestamp - interval '1 hour') as last_hour
+    ) a;";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        return pg_fetch_array($result);
+
+
+}
+
+function insert_box1($db, $id_temp, $show_min_max = false, $id_hum = null, $id_bat = null, $id_sig = null)
+{
+	insert_box(1, $db, $id_temp, $show_min_max, $id_hum, $id_bat, $id_sig);
+}
+
+function insert_box2($db, $id_temp, $show_min_max = false, $id_hum = null, $id_bat = null, $id_sig = null)
+{
+        insert_box(2, $db, $id_temp, $show_min_max, $id_hum, $id_bat, $id_sig);
+}
+
+
+function insert_box($type, $db, $id_temp, $show_min_max = false, $id_hum = null, $id_bat = null, $id_sig = null)
+{
+	global $config;
+	// Récupération des valeurs de chaque sonde
+	if ($id_temp != null)
+	{
+		$data = file_get_contents("http://".$config['template']['uri']."/php/get_onewire_data.php?id=".$id_temp);
+		$temp_data = json_decode($data, true);
+	}
+	if($id_hum != null)
+	{
+		$hum_data = get_data_variation($db, $id_hum);
+	}
+        if($id_bat != null)
+        {
+                $bat_data = get_simple_data($db, $id_bat);
+        }
+        if($id_sig != null)
+        {
+                $sig_data = get_simple_data($db, $id_sig);
+        }	
+	
+echo ' 
+        <div class="box">
+                <div class="box_titre'.$type.'">
+                        <div class="titre empile">';
+echo $temp_data["content"]["name"]["value"];
+echo "                   </div>";
+
+if(isset($bat_data) && $bat_data != '')
+{
+	$level = intval($bat_data["value"]/2);
+	echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+}
+if(isset($sig_data) && $sig_data != '')
+{
+        $level = intval($sig_data["value"]/2);
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+}
+if($temp_data['content']['deltaPlusOneHour']['direction'] == 'increase')
+{
+	$img = 'ArrowUpGreen.png';
+}
+elseif($temp_data['content']['deltaPlusOneHour']['direction'] == 'decrease')
+{
+        $img = 'ArrowDownRed.png';
+}
+
+echo '
+                </div>
+                <div class="box_body_'.$type.'">
+                        <div class="empile">
+                                <div class="empile temp'.$type.'">
+                                        <div class="empile value">'.$temp_data["content"]["last_value"]["value"].'</div>
+                                        <div class="empile"><img src="/image/'.$img.'"/></div>
+                                        <div class="empile unit">°C</div>
+                                        <div class="subtitle">Température</div>
+                                </div>';
+
+if($show_min_max)
+{
+echo '
+                                <div class="empile temp'.$type.'_minmax">
+                                        <div>
+                                                <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['max'].'</div>
+                                                <div class="empile unit">°C</div>
+                                                <div class="subtitle">Max</div>
+                                        </div>
+                                        <div>
+                                                <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['min'].'</div>
+                                                <div class="empile unit">°C</div>
+                                                <div class="subtitle">Min</div>
+                                        </div>
+                                </div>';
+}
+echo '                        </div>';
+
+if(isset($hum_data) && $hum_data != '')
+{
+if($hum_data['last_hour_variation'] == 'increase')
+{
+        $img = 'ArrowUpGrey.png';
+}
+elseif($hum_data['last_hour_variation'] == 'decrease')
+{
+        $img = 'ArrowDownGrey.png';
+}
+
+echo '                       <div class="separation empile">&nbsp;</div>
+                        <div class="empile hum'.$type.'">
+                                <div class="empile value">'.$hum_data["current"].'</div>
+                                <div class="empile"><img src="/image/'.$img.'"/></div>
+                                <div class="empile unit">%</div>
+                                <div class="subtitle" >Humidité</div>
+                        </div>';
+}
+
+
+echo '                </div>
+        </div>';
+
+
+
+
+}
+
+function insert_box3($db, $id_temp, $id_hum, $id_press, $id_bat = null, $id_sig = null)
+{
+        global $config;
+        // Récupération des valeurs de chaque sonde
+        if ($id_temp != null)
+        {
+                $data = file_get_contents("http://".$config['template']['uri']."/php/get_onewire_data.php?id=".$id_temp);
+                $temp_data = json_decode($data, true);
+        }
+        if($id_hum != null)
+        {
+                $data = file_get_contents("http://".$config['template']['uri']."/php/get_onewire_data.php?id=".$id_hum);
+                $hum_data = json_decode($data, true);
+	}
+	if($id_press != null)
+	{
+                $press_data = get_data_variation($db, $id_press);
+        }
+        if($id_bat != null)
+        {
+                $bat_data = get_simple_data($db, $id_bat);
+        }
+        if($id_sig != null)
+        {
+                $sig_data = get_simple_data($db, $id_sig);
+        }
+
+echo ' 
+        <div class="box">
+                <div class="box_titre2">
+                        <div class="titre empile">
+				Extérieur
+	                </div>';
+
+if(isset($bat_data) && $bat_data != '')
+{
+        $level = intval($bat_data["value"]/2);
+        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+}
+if(isset($sig_data) && $sig_data != '')
+{
+        $level = intval($sig_data["value"]/2);
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+}
+if($temp_data['content']['deltaPlusOneHour']['direction'] == 'increase')
+{
+        $img = 'ArrowUpGreen.png';
+}
+elseif($temp_data['content']['deltaPlusOneHour']['direction'] == 'decrease')
+{
+        $img = 'ArrowDownRed.png';
+}
+echo '
+                </div>
+                <div class="box_body_3">
+                        <div class="empile">
+                                <div class="empile temp3">
+                                        <div class="empile value">'.$temp_data["content"]["last_value"]["value"].'</div>
+                                        <div class="empile"><img src="/image/'.$img.'"/></div>
+                                        <div class="empile unit">°C</div>
+                                        <div class="subtitle">Température</div>
+                                </div>';
+echo '
+                                <div class="empile">
+                                        <div class="temp3_minmax">
+                                                <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['max'].'</div>
+                                                <div class="empile unit">°C</div>
+                                                <div class="subtitle">Max</div>
+                                        </div>
+                                        <div class="temp3_minmax">
+                                                <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['min'].'</div>
+                                                <div class="empile unit">°C</div>
+                                                <div class="subtitle">Min</div>
+                                        </div>
+                                </div>';
+
+if($hum_data['content']['deltaPlusOneHour']['direction'] == 'increase')
+{
+        $img = 'ArrowUpGrey.png';
+}
+elseif($hum_data['content']['deltaPlusOneHour']['direction'] == 'decrease')
+{
+        $img = 'ArrowDownGrey.png';
+}
+
+echo '                  </div>
+                        <div class="separation empile">&nbsp;</div>
+                        <div class="empile hum_press">
+                                <div>
+                                        <div class="empile hum3">
+				                <div class="empile value">'.$hum_data["content"]["last_value"]["value"].'</div>
+				                <div class="empile"><img src="/image/'.$img.'"/></div>
+				                <div class="empile unit">%</div>
+				                <div class="subtitle">Humidité</div>
+                                        </div>
+		                        <div class="empile">
+		                                <div class="hum3_minmax">
+		                                        <div class="empile value">'.$hum_data['content']['deltaPlusOneDay']['max'].'</div>
+		                                        <div class="empile unit">%</div>
+		                                        <div class="subtitle">Max</div>
+		                                </div>
+		                                <div  class="hum3_minmax">
+		                                        <div class="empile value">'.$hum_data['content']['deltaPlusOneDay']['min'].'</div>
+		                                        <div class="empile unit">%</div>
+		                                        <div class="subtitle">Min</div>
+		                                </div>
+		                        </div>
+                                </div>';
+
+if($press_data['last_hour_variation'] == 'increase')
+{
+        $img = 'ArrowUpGrey.png';
+}
+elseif($press_data['last_hour_variation'] == 'decrease')
+{
+        $img = 'ArrowDownGrey.png';
+}
+echo '                                <div class="separation_h">&nbsp;</div>
+                                <div class="press3">
+			                <div class="empile value">'.$press_data["current"].'</div>
+			                <div class="empile"><img src="/image/'.$img.'"/></div>
+			                <div class="empile unit">HPa</div>
+			                <div class="subtitle">Pression</div>
+                                </div>
+
+                        </div>
+                </div>
+        </div>
+';
+
+}
+
+/*
+	<br/>
+        <div class="box">
+                <div class="box_titre2">
+                        <div class="titre empile">
+                                Pluviométrie
+                        </div>
+                        <div class="empile info" ><img src='/image/SignalLevel3'/></div>
+                        <div class="empile info" ><img src='/image/Battery2.png'/></div>
+                </div>
+                <div class="box_body_3">
+			<div class="empile pluiv" >
+				<div>
+                        	        <div class="empile value">0</div>
+	                                <div class="empile unit">mm</div>
+        	                        <div class="subtitle">Aujourd'hui</div>
+				</div>
+                                <div>
+                                        <div class="empile value">35</div>
+                                        <div class="empile unit">mm</div>
+                                        <div class="subtitle">7 jours</div>
+                                </div>
+			</div>
+                        <div class="empile pluiv">
+                                <div>
+                                        <div class="empile value">10</div>
+                                        <div class="empile unit">mm</div>
+                                        <div class="subtitle">Hier</div>
+                                </div>
+                                <div>
+                                        <div class="empile value">160</div>
+                                        <div class="empile unit">mm</div>
+                                        <div class="subtitle">Mois</div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <div class="box">
+                        <div class="box_titre2 empile">
+                                <div class="titre">Conso. Electricité</div>
+                        </div>
+                <div class="box_body_4">
+                                <div class="elect_i" >
+                                        <div class="empile value">522</div>
+                                        <div class="empile unit">W</div>
+                                        <div class="subtitle">Instantanée</div>
+                                </div>
+                       <div class="separation_h">&nbsp;</div>
+
+                        <div style="text-align:right;">
+                                <div class="empile elect" >
+                                        <div class="empile value">20,5</div>
+                                        <div class="empile unit">Kw</div>
+                                        <div class="subtitle">Jour</div>
+                                </div>
+                                <div class="empile elect elect_2">
+                                        <div class="empile value">35</div>
+                                        <div class="empile unit">€</div>
+                                        <div class="subtitle">&nbsp;</div>
+                                </div>
+                                <div></div>
+                                <div class="empile elect" >
+                                        <div class="empile value">150</div>
+                                        <div class="empile unit">Kw</div>
+                                        <div class="subtitle">Mois</div>
+                                </div>
+                                <div class="empile elect elect_2">
+                                        <div class="empile value">160</div>
+                                        <div class="empile unit">€</div>
+                                        <div class="subtitle">&nbsp;</div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+    </body>
+</html>
+*/
+?>

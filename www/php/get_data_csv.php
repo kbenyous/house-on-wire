@@ -395,21 +395,43 @@ echo "Date".$s_separateur.implode($s_separateur, $liste_champ).$s_fin_ligne;
                	}
        break;
                
-	case 'raintotal' :
-		echo "Date".$s_separateur."Cumul Mensuel".$s_separateur."Cumul Annuel".$s_fin_ligne;
-		$query = "select date::date, total_rain, sum(total_rain) OVER (ORDER BY date) as yearly_total_rain
+	case 'monthly_rain' :
+	case 'daily_rain' :
+	case 'hourly_rain' :
+		echo "Date".$s_separateur."Valeur".$s_separateur."Cumul".$s_fin_ligne;
+		switch($type)
+		{
+			case 'monthly_rain' : 
+				$group = "date_trunc('month', date)"; 
+				$date = "date_trunc('year', date) = '".$_GET['date']."'";
+				$date_out = "date::date";
+				break;
+			case 'daily_rain' : 
+				$group = "date_trunc('day', date)"; 
+                                $date = "date_trunc('month', date) = '".$_GET['date']."'";
+                                $date_out = "date::date";
+				break;
+                        case 'hourly_rain' :
+                                $group = "date_trunc('hour', date)";
+                                $date = "date_trunc('day', date) = '".$_GET['date']."'";
+                                $date_out = "date::time";
+                                break;
+
+
+		}
+		$query = "select ".$date_out." as date, rain, sum(rain) OVER (ORDER BY date) as total_rain
 			  from (
-			  	select date_trunc('month', date) as date, round((max(value::numeric) - min(value::numeric))::numeric, 1) as total_rain
+			  	select ".$group." as date, round((max(value::numeric) - min(value::numeric))::numeric, 1) as rain
 			  	from onewire_data
-				where id = 'PCR918N.rt' and date_trunc('year', date) = '".$_GET['year']."' 
-				group by date_trunc('month', date) 
-				order by date_trunc('month', date)) foo 
-			  group by date, total_rain;";
+				where id = '".$sonde."' and ".$date." 
+				group by ".$group." 
+				order by ".$group.") foo 
+			  group by date, rain;";
 		$result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
 		
 		while ($row = pg_fetch_array($result))
 		{
-			echo $row['date'].$s_separateur.$row['total_rain'].$s_separateur.$row['yearly_total_rain'].$s_fin_ligne;
+			echo $row['date'].$s_separateur.$row['rain'].$s_separateur.$row['total_rain'].$s_fin_ligne;
 		}
 	break;
 
