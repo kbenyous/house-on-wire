@@ -75,9 +75,14 @@
         }
 
         .box .box_body_4 {
-            height: 142px;
+            height: 185px;
 	    text-align:center;
         }
+
+	.box .popupLink {
+		cursor: pointer;
+		text-decoration: none;
+	}
 
 	.empile {
                 display: inline-block;

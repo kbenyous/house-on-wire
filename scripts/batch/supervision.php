@@ -135,22 +135,22 @@ $height=($lines-($bspace+$cspace+$bspace))/2;
 
 
 // $tl = Top Left
-$tl=ncurses_newwin($height+2, $width, $bspace+1, $bspace);
+$tl=ncurses_newwin($height+1, $width, $bspace, $bspace);
 ncurses_wborder($tl,0,0, 0,0, 0,0, 0,0);
 ncurses_mvwaddstr($tl, 0, 1, " Température " );
 
 // $tr = Top Right
-$tr=ncurses_newwin($height+2, $width, $bspace+1, $bspace+$width+$cspace);
+$tr=ncurses_newwin($height+1, $width, $bspace, $bspace+$width+$cspace);
 ncurses_wborder($tr,0,0, 0,0, 0,0, 0,0);
 ncurses_mvwaddstr($tr, 0, 1, " Consommation " );
 
 // $tr = Top Right
-$bl=ncurses_newwin($height-2, $width, $bspace+1+$height+2+$cspace, $bspace);
+$bl=ncurses_newwin($height-1, $width, $bspace+$height+1+$cspace, $bspace);
 ncurses_wborder($bl,0,0, 0,0, 0,0, 0,0);
 ncurses_mvwaddstr($bl, 0, 1, " Supervision " );
 
 // $tr = Top Right
-$br=ncurses_newwin($height-2, $width, $bspace+1+$height+2+$cspace, $bspace+$width+$cspace);
+$br=ncurses_newwin($height-1, $width, $bspace+$height+1+$cspace, $bspace+$width+$cspace);
 ncurses_wborder($br,0,0, 0,0, 0,0, 0,0);
 ncurses_mvwaddstr($br, 0, 1, " Météo " );
 
@@ -304,9 +304,38 @@ $result = pg_query( $db,
 $luminosite_now =  pg_fetch_array($result);
 
 
+/*
 
+$query = "
+SELECT
+        (max_day-min_day)::integer as rain_day,
+        (max_yest-min_yest)::integer as rain_yest,
+        (max_day-min_week)::integer as rain_week,
+        (max_day-min_month)::integer as rain_month,
+        date_trunc('day', current_date)::date as day,
+        date_trunc('day', current_date - interval '1 day')::date as yest,
+        date_trunc('month', current_date)::date as week,
+        date_trunc('year', current_date)::date as month
 
+FROM (
+        SELECT
+                min(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as min_day,
+                max(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as max_day,
+                min(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as min_yest,
+                max(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as max_yest,
+                min(case when date_trunc('day', current_date - interval '7 day') < date_trunc('day', date) then value end)::numeric as min_week,
+                min(value)::numeric as min_month
+        FROM (
+                SELECT value, date
+                FROM onewire_data
+                WHERE
+                        id = '".$id.".rt'
+                        and date_trunc('month', current_date) = date_trunc('month', date)
+                ORDER BY date desc
+        ) a
+) b";
 
+*/
 ncurses_mvwaddstr($br, 2, 2, "Température Extérieur   : ".sprintf("%6s",$ext_now['last_value'])." ".$ext_now['unity']);
 ncurses_mvwaddstr($br, 6, 2, "Luminosité  : ".sprintf("%5s",$luminosite_now['last_value'])." ".$luminosite_now['unity']);
 ncurses_mvwaddstr($br, 7, 2, "Pres. Atmo. : ".sprintf("%5s",$pression_now['last_value'])." ".$pression_now['unity']);

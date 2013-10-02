@@ -107,7 +107,7 @@ echo '
                 </div>
                 <div class="box_body_'.$type.'">
                         <div class="empile">
-                                <div class="empile temp'.$type.'">
+                                <div class="empile temp'.$type.' popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22'.$id_temp.'%22%7D">
                                         <div class="empile value">'.$temp_data["content"]["last_value"]["value"].'</div>
                                         <div class="empile"><img src="/image/'.$img.'"/></div>
                                         <div class="empile unit">°C</div>
@@ -144,7 +144,7 @@ elseif($hum_data['last_hour_variation'] == 'decrease')
 }
 
 echo '                       <div class="separation empile">&nbsp;</div>
-                        <div class="empile hum'.$type.'">
+                        <div class="empile hum'.$type.' popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22'.$id_hum.'%22%7D">
                                 <div class="empile value">'.$hum_data["current"].'</div>
                                 <div class="empile"><img src="/image/'.$img.'"/></div>
                                 <div class="empile unit">%</div>
@@ -217,7 +217,7 @@ echo '
                 </div>
                 <div class="box_body_3">
                         <div class="empile">
-                                <div class="empile temp3">
+                                <div class="empile temp3 popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22'.$id_temp.'%22%7D">
                                         <div class="empile value">'.$temp_data["content"]["last_value"]["value"].'</div>
                                         <div class="empile"><img src="/image/'.$img.'"/></div>
                                         <div class="empile unit">°C</div>
@@ -250,7 +250,7 @@ echo '                  </div>
                         <div class="separation empile">&nbsp;</div>
                         <div class="empile hum_press">
                                 <div>
-                                        <div class="empile hum3">
+                                        <div class="empile hum3 popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22'.$id_hum.'%22%7D">
 				                <div class="empile value">'.$hum_data["content"]["last_value"]["value"].'</div>
 				                <div class="empile"><img src="/image/'.$img.'"/></div>
 				                <div class="empile unit">%</div>
@@ -279,7 +279,7 @@ elseif($press_data['last_hour_variation'] == 'decrease')
         $img = 'ArrowDownGrey.png';
 }
 echo '                                <div class="separation_h">&nbsp;</div>
-                                <div class="press3">
+                                <div class="press3 popupLink" data-type="graph" data-parameters="%7B%22id%22%3A%22'.$id_press.'%22%7D">
 			                <div class="empile value">'.$press_data["current"].'</div>
 			                <div class="empile"><img src="/image/'.$img.'"/></div>
 			                <div class="empile unit">HPa</div>
@@ -293,51 +293,135 @@ echo '                                <div class="separation_h">&nbsp;</div>
 
 }
 
-/*
-	<br/>
-        <div class="box">
-                <div class="box_titre2">
+function insert_box_rain($db, $id)
+{
+
+$query = "
+SELECT
+        (max_day-max_yest)::integer as rain_day,
+        (max_yest-min_yest)::integer as rain_yest,
+        (max_day-min_week)::integer as rain_week,
+        (max_day-min_month)::integer as rain_month,
+	date_trunc('day', current_date)::date as day,
+	date_trunc('day', current_date - interval '1 day')::date as yest,
+	date_trunc('month', current_date)::date as week,
+        date_trunc('year', current_date)::date as month
+
+FROM (
+        SELECT
+                max(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as max_day,
+                max(case when date_trunc('day', current_date - interval '2 day') = date_trunc('day', date) then value end)::numeric as min_yest,
+                max(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as max_yest,
+                max(case when date_trunc('day', current_date - interval '8 day') < date_trunc('day', date) then value end)::numeric as min_week,
+                min(case when date_trunc('month', current_date) = date_trunc('month', date) then value end)::numeric as min_month
+        FROM (
+                SELECT value, date
+                FROM onewire_data
+                WHERE
+                        id = '".$id.".rt'
+                        and ( date > current_date - interval '8 day' or
+                        date_trunc('month', current_date) = date_trunc('month', date))
+                ORDER BY date desc
+        ) a
+) b";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        $rain_data =  pg_fetch_array($result);
+
+
+        $bat_data = get_simple_data($db, $id.'.b');
+        $sig_data = get_simple_data($db, $id.'.s');
+
+
+echo '
+       <div class="box">
+                <div class="box_titre2" style="min-width: 200px;">
                         <div class="titre empile">
                                 Pluviométrie
-                        </div>
-                        <div class="empile info" ><img src='/image/SignalLevel3'/></div>
-                        <div class="empile info" ><img src='/image/Battery2.png'/></div>
+                        </div>';
+if(isset($bat_data) && $bat_data != '')
+{
+        $level = intval($bat_data["value"]/2);
+        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+}
+if(isset($sig_data) && $sig_data != '')
+{
+        $level = intval($sig_data["value"]/2);
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+}
+
+
+echo '
                 </div>
                 <div class="box_body_3">
 			<div class="empile pluiv" >
-				<div>
-                        	        <div class="empile value">0</div>
+				<div class="popupLink" data-type="graphRain" data-parameters="%7B%22type%22%3A%22hourly_rain%22,%22date%22%3A%22'.$rain_data['day'].'%22%7D">
+                        	        <div class="empile value">'.$rain_data['rain_day'].'</div>
 	                                <div class="empile unit">mm</div>
-        	                        <div class="subtitle">Aujourd'hui</div>
+        	                        <div class="subtitle">Aujourd\'hui</div>
 				</div>
-                                <div>
-                                        <div class="empile value">35</div>
+                                <div class="popupLink" data-type="graphRain" data-parameters="%7B%22type%22%3A%22daily_rain%22,%22date%22%3A%22'.$rain_data['week'].'%22%7D">
+                                        <div class="empile value">'.$rain_data['rain_week'].'</div>
                                         <div class="empile unit">mm</div>
                                         <div class="subtitle">7 jours</div>
                                 </div>
 			</div>
                         <div class="empile pluiv">
-                                <div>
-                                        <div class="empile value">10</div>
+                                <div class="popupLink" data-type="graphRain" data-parameters="%7B%22type%22%3A%22hourly_rain%22,%22date%22%3A%22'.$rain_data['yest'].'%22%7D">
+                                        <div class="empile value">'.$rain_data['rain_yest'].'</div>
                                         <div class="empile unit">mm</div>
                                         <div class="subtitle">Hier</div>
                                 </div>
-                                <div>
-                                        <div class="empile value">160</div>
+                                <div class="popupLink" data-type="graphRain" data-parameters="%7B%22type%22%3A%22monthly_rain%22,%22date%22%3A%22'.$rain_data['month'].'%22%7D">
+                                        <div class="empile value">'.$rain_data['rain_month'].'</div>
                                         <div class="empile unit">mm</div>
                                         <div class="subtitle">Mois</div>
                                 </div>
                         </div>
                 </div>
-        </div>
+        </div>';
 
+}
+
+function insert_box_elect($db)
+{
+	$query = "
+	  SELECT
+		round((hchc::numeric+hchp::numeric)/1000, 1) as hchchp,
+		round(cout_hc+cout_hp+cout_abo, 1) as cout_total
+	  FROM
+		teleinfo_cout
+	  WHERE 
+		date = current_date - interval '1 day'";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        $data_veille =  pg_fetch_array($result);
+
+	$query = "
+		select 
+			round(sum((hchc::numeric+hchp::numeric)/1000), 0) as hchchp, 
+			round(sum(cout_hc+cout_hp+cout_abo), 1) as cout_total 
+		from teleinfo_cout 
+		where 
+		case 
+			when EXTRACT(DAY from current_date) = 1 
+				THEN date_trunc('month', date) = date_trunc('month', current_date -interval '1day')
+				ELSE date_trunc('month', date) = date_trunc('month', current_date)
+		end";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        $data_mois =  pg_fetch_array($result);
+
+	$query = "select papp from teleinfo order by date desc limit 1;";
+        $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
+        $data_inst =  pg_fetch_array($result);
+
+
+echo '
         <div class="box">
                         <div class="box_titre2 empile">
                                 <div class="titre">Conso. Electricité</div>
                         </div>
                 <div class="box_body_4">
                                 <div class="elect_i" >
-                                        <div class="empile value">522</div>
+                                        <div class="empile value">'.$data_inst['papp'].'</div>
                                         <div class="empile unit">W</div>
                                         <div class="subtitle">Instantanée</div>
                                 </div>
@@ -345,31 +429,30 @@ echo '                                <div class="separation_h">&nbsp;</div>
 
                         <div style="text-align:right;">
                                 <div class="empile elect" >
-                                        <div class="empile value">20,5</div>
+                                        <div class="empile value">'.$data_veille['hchchp'].'</div>
                                         <div class="empile unit">Kw</div>
-                                        <div class="subtitle">Jour</div>
+                                        <div class="subtitle">Veille</div>
                                 </div>
                                 <div class="empile elect elect_2">
-                                        <div class="empile value">35</div>
+                                        <div class="empile value">'.$data_veille['cout_total'].'</div>
                                         <div class="empile unit">€</div>
                                         <div class="subtitle">&nbsp;</div>
                                 </div>
                                 <div></div>
                                 <div class="empile elect" >
-                                        <div class="empile value">150</div>
+                                        <div class="empile value">'.$data_mois['hchchp'].'</div>
                                         <div class="empile unit">Kw</div>
                                         <div class="subtitle">Mois</div>
                                 </div>
                                 <div class="empile elect elect_2">
-                                        <div class="empile value">160</div>
+                                        <div class="empile value">'.$data_mois['cout_total'].'</div>
                                         <div class="empile unit">€</div>
                                         <div class="subtitle">&nbsp;</div>
                                 </div>
+
                         </div>
                 </div>
         </div>
-
-    </body>
-</html>
-*/
+';
+}
 ?>

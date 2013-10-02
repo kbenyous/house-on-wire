@@ -14,7 +14,9 @@ $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port'].
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="/css/boxes.css" />
-        <title>House On Wire</title>
+        <link rel="stylesheet" type="text/css" href="/css/popup.css" />
+    
+    <title>House On Wire</title>
     </head>
     <body>
 
@@ -35,7 +37,23 @@ $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port'].
 	insert_box3($db, '28.BB1A53030000', '26.FF9E6E010000.v', '26.0B8D6E010000.v');
 ?>
 <br/>
+<?
+        insert_box_rain($db, 'PCR800');
+	insert_box_elect($db);
+?>
+
+        <script type="text/javascript" src="/js/class.js"></script>
+        <script type="text/javascript" src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.ui.min.js"></script>
+        <script type="text/javascript" src="/js/utils/viewport.js"></script>
+        <script type="text/javascript" src="/js/utils/xhrRequest.js"></script>
+        <script type="text/javascript" src="/js/utils/xDomainRequest.js"></script>
 
 
-    </body>
+        <script type="text/javascript" src="/js/popup.js"></script>
+        <script type="text/javascript" src="/js/popup/abstract.js"></script>
+        <script type="text/javascript" src="/js/popup/graph.js"></script>
+        <script type="text/javascript" src="/js/popup/graphRain.js"></script>
+
+</body>
 </html>
