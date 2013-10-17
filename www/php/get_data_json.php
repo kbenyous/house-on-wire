@@ -5,11 +5,14 @@
  * csvToArray function I think I found on php.net
  */
     
+    $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
+
+
     header('Content-type: application/json');
     
  
     // Set your CSV feed
-    $feed = 'http://house.vitre.info/php/get_data_csv.php?'.$_SERVER['QUERY_STRING'];
+    $feed = 'http://'.$config['template']['uri'].'/php/get_data_csv.php?'.$_SERVER['QUERY_STRING'];
     
     // Arrays we'll use later
     $keys = array();

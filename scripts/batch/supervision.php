@@ -295,6 +295,11 @@ $result = pg_query( $db,
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 $ext_hier =  pg_fetch_array($result);
 $result = pg_query( $db,
+        "select round(min(value::numeric), 1) as min, round(max(value::numeric), 1) as max from onewire_data where id = '28.BB1A53030000' and date_trunc('month', date) = date_trunc('month', current_date);"
+    ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
+$ext_mois =  pg_fetch_array($result);
+
+$result = pg_query( $db,
         "select id, last_value::numeric::integer as last_value, unity from onewire where id = '26.0B8D6E010000.v';"
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 $pression_now =  pg_fetch_array($result);
@@ -303,12 +308,9 @@ $result = pg_query( $db,
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 $luminosite_now =  pg_fetch_array($result);
 
-
-/*
-
 $query = "
 SELECT
-        (max_day-min_day)::integer as rain_day,
+        (max_day-max_yest)::integer as rain_day,
         (max_yest-min_yest)::integer as rain_yest,
         (max_day-min_week)::integer as rain_week,
         (max_day-min_month)::integer as rain_month,
@@ -319,45 +321,67 @@ SELECT
 
 FROM (
         SELECT
-                min(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as min_day,
                 max(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as max_day,
-                min(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as min_yest,
+                max(case when date_trunc('day', current_date - interval '2 day') = date_trunc('day', date) then value end)::numeric as min_yest,
                 max(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as max_yest,
-                min(case when date_trunc('day', current_date - interval '7 day') < date_trunc('day', date) then value end)::numeric as min_week,
-                min(value)::numeric as min_month
+                min(case when date_trunc('day', current_date - interval '8 day') < date_trunc('day', date) then value end)::numeric as min_week,
+                min(case when date_trunc('month', current_date) = date_trunc('month', date) then value end)::numeric as min_month
         FROM (
-                SELECT value, date
+                SELECT value::numeric, date
                 FROM onewire_data
                 WHERE
-                        id = '".$id.".rt'
-                        and date_trunc('month', current_date) = date_trunc('month', date)
-                ORDER BY date desc
+                        id = 'PCR800.rt'
+                        and date > date_trunc('month', current_date) - interval '8 day' 
         ) a
 ) b";
 
-*/
-ncurses_mvwaddstr($br, 2, 2, "Température Extérieur   : ".sprintf("%6s",$ext_now['last_value'])." ".$ext_now['unity']);
-ncurses_mvwaddstr($br, 6, 2, "Luminosité  : ".sprintf("%5s",$luminosite_now['last_value'])." ".$luminosite_now['unity']);
-ncurses_mvwaddstr($br, 7, 2, "Pres. Atmo. : ".sprintf("%5s",$pression_now['last_value'])." ".$pression_now['unity']);
-ncurses_mvwaddstr($br, 8, 2, "Humidité    : ".sprintf("%5s","xx.x")." "."%");
+$result = pg_query( $db, $query ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
+$pluvio =  pg_fetch_array($result);
 
-ncurses_mvwaddstr($br, 3, 2, "Aujourd'hui   Min :");
-ncurses_wcolor_set($br, 4);
-ncurses_mvwaddstr($br, 3, 21, sprintf("%6s",$ext_auj['min'])." ".$ext_now['unity']);
-ncurses_wcolor_set($br, 0);
-ncurses_mvwaddstr($br, 3, 33, "Max : ");
-ncurses_wcolor_set($br, 1);
-ncurses_mvwaddstr($br, 3, 38, sprintf("%6s",$ext_auj['max'])." ".$ext_now['unity']);
-ncurses_wcolor_set($br, 0);
 
-ncurses_mvwaddstr($br, 4, 2, "Hier          Min :");
+ncurses_wattron($br, NCURSES_A_BOLD);
+ncurses_mvwaddstr($br, 1, 10, "T° Min");
+ncurses_mvwaddstr($br, 1, 20, "T° Max");
+ncurses_mvwaddstr($br, 1, 30, "Pluie");
+ncurses_wattroff($br, NCURSES_A_BOLD);
+
+
+ncurses_mvwaddstr($br, 2, 2, "Auj.");
 ncurses_wcolor_set($br, 4);
-ncurses_mvwaddstr($br, 4, 21, sprintf("%6s",$ext_hier['min'])." ".$ext_now['unity']);
-ncurses_wcolor_set($br, 0);
-ncurses_mvwaddstr($br, 4, 33, "Max : ");
+ncurses_mvwaddstr($br, 2, 9, sprintf("%5s",$ext_auj['min'])." ".$ext_now['unity']);
 ncurses_wcolor_set($br, 1);
-ncurses_mvwaddstr($br, 4, 38, sprintf("%6s",$ext_hier['max'])." ".$ext_now['unity']);
+ncurses_mvwaddstr($br, 2, 19, sprintf("%5s",$ext_auj['max'])." ".$ext_now['unity']);
 ncurses_wcolor_set($br, 0);
+ncurses_mvwaddstr($br, 2, 28, sprintf("%5s",$pluvio['rain_day'])." mm");
+
+
+ncurses_mvwaddstr($br, 3, 2, "Hier");
+ncurses_wcolor_set($br, 4);
+ncurses_mvwaddstr($br, 3, 9, sprintf("%5s",$ext_hier['min'])." ".$ext_now['unity']);
+ncurses_wcolor_set($br, 1);
+ncurses_mvwaddstr($br, 3, 19, sprintf("%5s",$ext_hier['max'])." ".$ext_now['unity']);
+ncurses_wcolor_set($br, 0);
+ncurses_mvwaddstr($br, 3, 28, sprintf("%5s",$pluvio['rain_yest'])." mm");
+
+ncurses_mvwaddstr($br, 4, 2, "Mois");
+ncurses_wcolor_set($br, 4);
+ncurses_mvwaddstr($br, 4, 9, sprintf("%5s",$ext_mois['min'])." ".$ext_now['unity']);
+ncurses_wcolor_set($br, 1);
+ncurses_mvwaddstr($br, 4, 19, sprintf("%5s",$ext_mois['max'])." ".$ext_now['unity']);
+ncurses_wcolor_set($br, 0);
+ncurses_mvwaddstr($br, 4, 28, sprintf("%5s",$pluvio['rain_month'])." mm");
+
+
+
+
+
+
+
+ncurses_mvwaddstr($br, 6, 2, "Température Extérieur  : ".sprintf("%5s",$ext_now['last_value'])." ".$ext_now['unity']);
+ncurses_mvwaddstr($br, 7, 2, "Luminosité             : ".sprintf("%5s",$luminosite_now['last_value'])." ".$luminosite_now['unity']);
+ncurses_mvwaddstr($br, 8, 2, "Pres. Atmo.            : ".sprintf("%5s",$pression_now['last_value'])." ".$pression_now['unity']);
+ncurses_mvwaddstr($br, 9, 2, "Humidité               : ".sprintf("%5s","xx.x")." "."%");
+
 
 
 //$xml = simplexml_load_file('http://free.worldweatheronline.com/feed/weather.ashx?q=saint-etienne-de-montluc,44360&format=xml&num_of_days=3&key=c2980fcdc8213432131602');
@@ -366,15 +390,15 @@ $xml = simplexml_load_file('http://api.worldweatheronline.com/free/v1/weather.as
 
 if(isset($xml->weather[0]))
 {
-ncurses_mvwaddstr($br, 11, 2, "Auj     : ".sprintf("%3s",$xml->weather[0]->tempMinC)." C ".sprintf("%3s",$xml->weather[0]->tempMaxC)." C   ".$weather_trans[(int)$xml->weather[0]->weatherCode]);
+ncurses_mvwaddstr($br, 11, 2, "Auj     :".sprintf("%3s",$xml->weather[0]->tempMinC)."°C ".sprintf("%3s",$xml->weather[0]->tempMaxC)."°C   ".$weather_trans[(int)$xml->weather[0]->weatherCode]);
 }
 if(isset($xml->weather[1]))
 {
-ncurses_mvwaddstr($br, 12, 2, "Demain  : ".sprintf("%3s",$xml->weather[1]->tempMinC)." C ".sprintf("%3s",$xml->weather[1]->tempMaxC)." C   ".$weather_trans[(int)$xml->weather[1]->weatherCode]);
+ncurses_mvwaddstr($br, 12, 2, "Demain  :".sprintf("%3s",$xml->weather[1]->tempMinC)."°C ".sprintf("%3s",$xml->weather[1]->tempMaxC)."°C   ".$weather_trans[(int)$xml->weather[1]->weatherCode]);
 }
 if(isset($xml->weather[2]))
 {
-ncurses_mvwaddstr($br, 13, 2, "Ap. dem : ".sprintf("%3s",$xml->weather[2]->tempMinC)." C ".sprintf("%3s",$xml->weather[2]->tempMaxC)." C   ".$weather_trans[(int)$xml->weather[2]->weatherCode]);
+ncurses_mvwaddstr($br, 13, 2, "Ap. dem :".sprintf("%3s",$xml->weather[2]->tempMinC)."°C ".sprintf("%3s",$xml->weather[2]->tempMaxC)."°C   ".$weather_trans[(int)$xml->weather[2]->weatherCode]);
 }
 
 
@@ -406,39 +430,13 @@ else
         ncurses_wcolor_set($bl, 0);
 }
 
-$result = pg_query( $db,
-        "select count(*) as nb_sonde, sum(case when date_trunc('minute', last_update) = (select date_trunc('minute', max(last_update)) from onewire) then 1 else 0 end ) as nb_sonde_ok,  sum(case when date_trunc('minute', last_update) != (select date_trunc('minute', max(last_update)) from onewire) then 1 else 0 end ) as nb_sonde_ko, date_trunc('minute', max(last_update)) as last_update, case when (select date_trunc('minute', max(last_update)) from onewire) < current_timestamp - interval '1 min' then 1 else 0 end as alerte, current_timestamp - interval '1 min' from onewire;"
-    ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
-$maj =  pg_fetch_array($result);
-
-if($maj['nb_sonde_ok'] == $maj['nb_sonde'])
-{
-        ncurses_wcolor_set($bl, 2);
-	ncurses_mvwaddstr($bl, 4, 2, "Maj : ".$maj['last_update']." ".$maj['nb_sonde_ok']."/".$maj['nb_sonde']." sondes");
-        ncurses_wcolor_set($bl, 0);
-}
-else
-{
-        ncurses_wattron($bl, NCURSES_A_BOLD);
-        ncurses_wcolor_set($bl, 1);
-	ncurses_mvwaddstr($bl, 4, 2, "Maj : ".$maj['last_update']." ".$maj['nb_sonde_ok']."/".$maj['nb_sonde']." sondes");
-        ncurses_wattroff($bl, NCURSES_A_BOLD);
-        ncurses_wcolor_set($bl, 0);
-}
-
-
-// nb_sonde | nb_sonde_ok | nb_sonde_ko |     last_update     | alerte |           ?column?
-//----------+-------------+-------------+---------------------+--------+-------------------------------
-//       35 |          35 |           0 | 2013-04-29 23:10:02 |      0 | 2013-04-29 21:11:27.299489+00
-
-
 // Récupération des sondes
 $result = pg_query(
         $db,
         'select id, name, last_value from onewire where type = \'ouverture\' order by name;'
     ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
 
-    $ligne = 6;
+    $ligne = 4;
     while($row = pg_fetch_array($result)) {
        ncurses_mvwaddstr($bl, $ligne, 2, sprintf("%-18s",$row['name']." : "));
        if($row['last_value'] == 1)
@@ -459,6 +457,36 @@ $result = pg_query(
         $ligne++;
 
     }
+
+
+
+$result = pg_query( $db,
+        "select count(*) as nb_sonde, sum(case when date_trunc('minute', last_update) = (select date_trunc('minute', max(last_update)) from onewire) then 1 else 0 end ) as nb_sonde_ok,  sum(case when date_trunc('minute', last_update) != (select date_trunc('minute', max(last_update)) from onewire) then 1 else 0 end ) as nb_sonde_ko, date_trunc('minute', max(last_update)) as last_update, case when (select date_trunc('minute', max(last_update)) from onewire) < current_timestamp - interval '1 min' then 1 else 0 end as alerte, current_timestamp - interval '1 min' from onewire;"
+    ) or die('Erreur SQL sur recuperation des valeurs: '.pg_error());
+$maj =  pg_fetch_array($result);
+
+if($maj['nb_sonde_ok'] == $maj['nb_sonde'])
+{
+	ncurses_mvwaddstr($bl, 13, 2, "Maj : ");
+        ncurses_wcolor_set($bl, 2);
+        ncurses_mvwaddstr($bl, 13, 8, $maj['last_update']." ".$maj['nb_sonde_ok']."/".$maj['nb_sonde']." sondes");
+        ncurses_wcolor_set($bl, 0);
+}
+else
+{
+        ncurses_mvwaddstr($bl, 13, 2, "Maj : ");
+        ncurses_wattron($bl, NCURSES_A_BOLD);
+        ncurses_wcolor_set($bl, 1);
+        ncurses_mvwaddstr($bl, 13, 8, $maj['last_update']." ".$maj['nb_sonde_ok']."/".$maj['nb_sonde']." sondes");
+        ncurses_wattroff($bl, NCURSES_A_BOLD);
+        ncurses_wcolor_set($bl, 0);
+}
+
+
+// nb_sonde | nb_sonde_ok | nb_sonde_ko |     last_update     | alerte |           ?column?
+//----------+-------------+-------------+---------------------+--------+-------------------------------
+//       35 |          35 |           0 | 2013-04-29 23:10:02 |      0 | 2013-04-29 21:11:27.299489+00
+
 
 
 

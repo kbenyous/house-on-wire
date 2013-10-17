@@ -1,3 +1,7 @@
+<?php
+$config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
+?>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,7 +18,7 @@
     <script type="text/javascript">
     
       var getJSONandDisplay = function(){
-      		$.getJSON("http://house.vitre.info/php/get_data_json.php?sonde=PCR800.rt&date=<? echo $_GET['date'];?>&type=<? echo $_GET['type'];?>", function(data)
+      		$.getJSON("http://<? echo $config['template']['uri'];?>/php/get_data_json.php?sonde=PCR800.rt&date=<? echo $_GET['date'];?>&type=<? echo $_GET['type'];?>", function(data)
 		{
 			var dataGoogle = [['Date','Pluie','Pluie Cumulee']];
 			for(i=0;i<data.length;i++)
@@ -56,10 +60,10 @@
 						switch($_GET['type'])
 						{
 							case 'monthly_rain' :
-								echo "window.location = 'http://house.vitre.info/php/chart_rain_total.php?type=daily_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
+								echo "window.location = 'http://".$config['template']['uri']."/php/chart_rain_total.php?type=daily_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
 								break;
                                                         case 'daily_rain' :
-                                                                echo "window.location = 'http://house.vitre.info/php/chart_rain_total.php?type=hourly_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
+                                                                echo "window.location = 'http://".$config['template']['uri']."/php/chart_rain_total.php?type=hourly_rain&date='+dataGoogleVis.getFormattedValue(item.row,0);";
                                                                 break;
 						}
     					  

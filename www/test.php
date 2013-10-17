@@ -54,6 +54,8 @@ $db = pg_connect("host=".$config['bdd']['host']." port=".$config['bdd']['port'].
         <script type="text/javascript" src="/js/popup/abstract.js"></script>
         <script type="text/javascript" src="/js/popup/graph.js"></script>
         <script type="text/javascript" src="/js/popup/graphRain.js"></script>
+        <script type="text/javascript" src="/js/popup/graphPuissanceApparente.js"></script>
+        <script type="text/javascript" src="/js/popup/graphConsoElect.js"></script>
 
 </body>
 </html>

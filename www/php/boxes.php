@@ -87,12 +87,12 @@ echo "                   </div>";
 if(isset($bat_data) && $bat_data != '')
 {
 	$level = intval($bat_data["value"]/2);
-	echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+	echo '                        <div class="empile info"><img src="/image/Battery'.$level.'.png"/></div>';
 }
 if(isset($sig_data) && $sig_data != '')
 {
         $level = intval($sig_data["value"]/2);
-        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'.png"/></div>';
 }
 if($temp_data['content']['deltaPlusOneHour']['direction'] == 'increase')
 {
@@ -198,12 +198,12 @@ echo '
 if(isset($bat_data) && $bat_data != '')
 {
         $level = intval($bat_data["value"]/2);
-        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'.png"/></div>';
 }
 if(isset($sig_data) && $sig_data != '')
 {
         $level = intval($sig_data["value"]/2);
-        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'.png"/></div>';
 }
 if($temp_data['content']['deltaPlusOneHour']['direction'] == 'increase')
 {
@@ -312,21 +312,18 @@ FROM (
                 max(case when date_trunc('day', current_date) = date_trunc('day', date) then value end)::numeric as max_day,
                 max(case when date_trunc('day', current_date - interval '2 day') = date_trunc('day', date) then value end)::numeric as min_yest,
                 max(case when date_trunc('day', current_date - interval '1 day') = date_trunc('day', date) then value end)::numeric as max_yest,
-                max(case when date_trunc('day', current_date - interval '8 day') < date_trunc('day', date) then value end)::numeric as min_week,
+                min(case when date_trunc('day', current_date - interval '8 day') < date_trunc('day', date) then value end)::numeric as min_week,
                 min(case when date_trunc('month', current_date) = date_trunc('month', date) then value end)::numeric as min_month
         FROM (
-                SELECT value, date
+                SELECT value::numeric, date
                 FROM onewire_data
                 WHERE
                         id = '".$id.".rt'
-                        and ( date > current_date - interval '8 day' or
-                        date_trunc('month', current_date) = date_trunc('month', date))
-                ORDER BY date desc
+                        and date > date_trunc('month', current_date) - interval '8 day' 
         ) a
 ) b";
         $result = pg_query( $db, $query ) or die ("Erreur SQL sur recuperation des valeurs: ". pg_result_error() );
         $rain_data =  pg_fetch_array($result);
-
 
         $bat_data = get_simple_data($db, $id.'.b');
         $sig_data = get_simple_data($db, $id.'.s');
@@ -341,12 +338,12 @@ echo '
 if(isset($bat_data) && $bat_data != '')
 {
         $level = intval($bat_data["value"]/2);
-        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'"/></div>';
+        echo '                        <div class="empile info"><img src="/image/Battery'.$level.'.png"/></div>';
 }
 if(isset($sig_data) && $sig_data != '')
 {
         $level = intval($sig_data["value"]/2);
-        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'"/></div>';
+        echo '                        <div class="empile info"><img src="/image/SignalLevel'.$level.'.png"/></div>';
 }
 
 
@@ -414,20 +411,21 @@ function insert_box_elect($db)
         $data_inst =  pg_fetch_array($result);
 
 
+
 echo '
         <div class="box">
                         <div class="box_titre2 empile">
                                 <div class="titre">Conso. Electricité</div>
                         </div>
                 <div class="box_body_4">
-                                <div class="elect_i" >
+                                <div class="elect_i popupLink" data-type="graphPuissanceApparente" data-parameters="undefined" >
                                         <div class="empile value">'.$data_inst['papp'].'</div>
                                         <div class="empile unit">W</div>
                                         <div class="subtitle">Instantanée</div>
                                 </div>
                        <div class="separation_h">&nbsp;</div>
 
-                        <div style="text-align:right;">
+                        <div style="text-align:right;" class="popupLink" data-type="graphConsoElect" data-parameters="undefined">
                                 <div class="empile elect" >
                                         <div class="empile value">'.$data_veille['hchchp'].'</div>
                                         <div class="empile unit">Kw</div>
