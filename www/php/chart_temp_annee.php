@@ -60,7 +60,7 @@
 				var item = selection[i];
 				if (item.row != null && item.column != null) {
 				} else if (item.row != null) {
-					window.location = 'http://maison.coroller.com/php/chart_temp.php?date='+dataGoogleVis.getFormattedValue(item.row,0)+'-01';
+					window.location = 'http://maison.coroller.com/php/chart_temp.php?sonde=<? echo $sonde;?>&date='+dataGoogleVis.getFormattedValue(item.row,0)+'-01';
 				}
 			}
 		}

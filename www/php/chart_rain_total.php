@@ -18,7 +18,7 @@ $config = parse_ini_file("/etc/house-on-wire/house-on-wire.ini", true);
     <script type="text/javascript">
     
       var getJSONandDisplay = function(){
-      		$.getJSON("http://<? echo $config['template']['uri'];?>/php/get_data_json.php?sonde=PCR800.rt&date=<? echo $_GET['date'];?>&type=<? echo $_GET['type'];?>", function(data)
+      		$.getJSON("http://<? echo $config['template']['uri'];?>/php/get_data_json.php?sonde=PCR918N.rt&date=<? echo $_GET['date'];?>&type=<? echo $_GET['type'];?>", function(data)
 		{
 			var dataGoogle = [['Date','Pluie','Pluie Cumulee']];
 			for(i=0;i<data.length;i++)

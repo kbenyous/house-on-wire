@@ -117,7 +117,7 @@ echo '
 if($show_min_max)
 {
 echo '
-                                <div class="empile temp'.$type.'_minmax">
+                                <div class="empile temp'.$type.'_minmax popupLink" data-type="graphTemp" data-parameters="%7B%22sonde%22%3A%22'.$id_temp.'%22,%22date%22%3A%22'.date("Y").'-01-01%22%7D">
                                         <div>
                                                 <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['max'].'</div>
                                                 <div class="empile unit">°C</div>
@@ -224,7 +224,7 @@ echo '
                                         <div class="subtitle">Température</div>
                                 </div>';
 echo '
-                                <div class="empile">
+                                <div class="empile popupLink" data-type="graphTemp" data-parameters="%7B%22sonde%22%3A%22'.$id_temp.'%22,%22date%22%3A%22'.date("Y").'-01-01%22%7D">
                                         <div class="temp3_minmax">
                                                 <div class="empile value">'.$temp_data['content']['deltaPlusOneDay']['max'].'</div>
                                                 <div class="empile unit">°C</div>
@@ -256,7 +256,7 @@ echo '                  </div>
 				                <div class="empile unit">%</div>
 				                <div class="subtitle">Humidité</div>
                                         </div>
-		                        <div class="empile">
+		                        <div class="empile popupLink" data-type="graphTemp" data-parameters="%7B%22sonde%22%3A%22'.$id_hum.'%22,%22date%22%3A%22'.date("Y").'-01-01%22%7D">
 		                                <div class="hum3_minmax">
 		                                        <div class="empile value">'.$hum_data['content']['deltaPlusOneDay']['max'].'</div>
 		                                        <div class="empile unit">%</div>
