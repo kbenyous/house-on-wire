@@ -12,7 +12,8 @@ class HW_vendor():
         pass
 
     def __iter__(self):
-        yield self.read_char()
+        while True:
+            yield self.read_char()
 
 class HW_serial_based(HW_vendor):
     __metaclass__ = ABCMeta
@@ -34,7 +35,7 @@ class RpiDom(HW_serial_based):
     CHANNEL_TELEINFO1 = 'A'
     CHANNEL_TELEINFO2 = 'B'
 
-    def __init__(self, port='/dev/ttyAMA0'):
+    def __init__(self, port='/dev/ttyAMA0', *args, **kwargs):
         super(RpiDom, self).__init__(port, *args, **kwargs)
         self.select_channel(self.CHANNEL_TELEINFO1)
 

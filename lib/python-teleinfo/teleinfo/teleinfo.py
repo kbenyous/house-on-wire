@@ -29,8 +29,10 @@ class Teleinfo:
         return frame
 
     def _synchro_debut_trame(self):
+        c = 0
         while self._hw.read_char() != self.MARKER_START_FRAME:
-            pass
+            c += 1
+        logger.debug("Skipped {} bytes while synchronizing for start of frame".format(c))
 
     def _get_raw_frame(self):
         frame = ''.join(itertools.takewhile(
@@ -41,19 +43,18 @@ class Teleinfo:
 
     def _checksum(self, key, value):
         chksum = 32
-        chksum += sum([c for c in key])
-        chksum += sum([c for c in value])
+        chksum += sum([ord(c) for c in key])
+        chksum += sum([ord(c) for c in value])
         chksum = (chksum & 63) + 32
         return chr(chksum)
 
 def main(ps_name, argv):
     import getopt
     import json
-    from .hw_vendors import *
 
     SUPPORTED_DEVICES = {
-        "RpiDom": RpiDom(),
-        "SolarBox_USB": SolarBox_USB()
+        "RpiDom": RpiDom,
+        "SolarBox_USB": SolarBox_USB
     }
 
     def usage():
@@ -63,6 +64,7 @@ def main(ps_name, argv):
         print("Supported hardware devices are:")
         print("  {}".format(SUPPORTED_DEVICES.keys()))
 
+    device = None
     try:
         opts, args = getopt.getopt(argv, "hd:", ["help", "device="])
     except getopt.GetoptError:
@@ -76,14 +78,21 @@ def main(ps_name, argv):
             try:
                 device = SUPPORTED_DEVICES.get(arg)
             except KeyError:
-                logger.critical("Invalid device: {}".format(arg))
+                print("Invalid device: {}".format(arg))
                 usage()
                 sys.exit(2)
+    if device is None:
+      print("Missing device argument")
+      usage()
+      sys.exit(2)
 
-    ti = Teleinfo(device)
-    json.dumps(ti.get_frame(), indent=2, separators=(',', ':'))
+    ti = Teleinfo(device())
+    print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
+
 
 if __name__ == "__main__":
+    logging.basicConfig()
     import sys
+    from .hw_vendors import *
     main(sys.argv[0], sys.argv[1:])
 
