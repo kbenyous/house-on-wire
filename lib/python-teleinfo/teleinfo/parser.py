@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class Teleinfo:
+class Parser:
     MARKER_START_FRAME = chr(2)
     MARKER_STOP_FRAME = chr(3)
     MARKER_END_LINE = '\r\n'
@@ -15,6 +15,10 @@ class Teleinfo:
         assert hw is not None and isinstance(hw, HW_vendor)
         self._hw = hw
         self._synchro_debut_trame()
+
+    def __iter__(self):
+        while True:
+            yield get_frame()
 
     def get_frame(self):
         raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
@@ -47,52 +51,4 @@ class Teleinfo:
         chksum += sum([ord(c) for c in value])
         chksum = (chksum & 63) + 32
         return chr(chksum)
-
-def main(ps_name, argv):
-    import getopt
-    import json
-
-    SUPPORTED_DEVICES = {
-        "RpiDom": RpiDom,
-        "SolarBox_USB": SolarBox_USB
-    }
-
-    def usage():
-        print("{} -d|--device <hw_device>".format(ps_name))
-        print("{} [-h|--help]".format(ps_name))
-        print("")
-        print("Supported hardware devices are:")
-        print("  {}".format(SUPPORTED_DEVICES.keys()))
-
-    device = None
-    try:
-        opts, args = getopt.getopt(argv, "hd:", ["help", "device="])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif opt in ("-d", "--device"):
-            try:
-                device = SUPPORTED_DEVICES.get(arg)
-            except KeyError:
-                print("Invalid device: {}".format(arg))
-                usage()
-                sys.exit(2)
-    if device is None:
-      print("Missing device argument")
-      usage()
-      sys.exit(2)
-
-    ti = Teleinfo(device())
-    print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
-
-
-if __name__ == "__main__":
-    logging.basicConfig()
-    import sys
-    from .hw_vendors import *
-    main(sys.argv[0], sys.argv[1:])
 
