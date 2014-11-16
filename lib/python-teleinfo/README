@@ -4,6 +4,12 @@ pour construire l'archive pip :
 pour installer avec pip:
   pip install dist/teleinfo-1.0.0.tar.gz
 
+pour upload vers Pypi :
+  (la 1ere fois, pour declarer le module) : python setup.py register
+  python setup.py sdist upload
+puis installation :
+  pip install teleinfoi
+
 Lors de l'installation, un outil CLI est installé : bin/teleinfo_json
 
 Usage du module :
