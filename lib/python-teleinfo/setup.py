@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='teleinfo',
-    version='1.0.0',
+    version='1.0.1',
     description='EDF Teleinfo frame acquisition',
     long_description="Read and parse teleinfo data from France EDF electricity provider",
     author='Mickael Le Baillif',

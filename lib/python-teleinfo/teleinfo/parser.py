@@ -18,7 +18,7 @@ class Parser:
 
     def __iter__(self):
         while True:
-            yield get_frame()
+            yield self.get_frame()
 
     def get_frame(self):
         raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
