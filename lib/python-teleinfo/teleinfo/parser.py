@@ -28,7 +28,7 @@ class Parser:
         ])
         if len(frame) != len(groups):
             logger.info("Discarded fields because of bad checksum: {}".format(
-                itertools.ifilterfalse(lambda g: g[2] != self._checksum(g[0], g[1]))
+                itertools.ifilterfalse(lambda g: g[2] != self._checksum(g[0], g[1]), groups)
             ))
         return frame
 
